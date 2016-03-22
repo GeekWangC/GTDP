@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common.css"/>
+<link rel="stylesheet" type="text/css" href="css/exercise.css"/>
+<title></title>
+</head>
+<body>
+
+<style>
+    body{ background:#fff;}
+    </style>
+</head>
+    
+  <!--顶部开始-->
+  <div class="top clearfix" style='height:24px'>
+      <div onclick="back()" class="back1"><a href="javascript:void(0);"><img src="img/back.png" /></a></div>
+  </div>
+  <!--顶部结束-->
+
+<div id="imgURLBox">
+	<img id="imgURL" src=""/>
+</div>
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+  <script type="text/javascript" src="js/zepto/divselect.js"></script>
+  <script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+function iosParameter(url){
+	document.getElementById("imgURL").src = url;
+}
+
+function back(){
+  if(common.isiOS){
+      window.location="IOS:BACK";
+  }
+}
+$("#imgURLBox").css({'margin-top':$(".top").height()});
+</script>
+</body>
+</html>

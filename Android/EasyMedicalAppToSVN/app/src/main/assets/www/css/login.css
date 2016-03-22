@@ -1,0 +1,36 @@
+/* CSS Document */
+.none{ display:none;}
+.a_right{ text-align:right;}
+
+/*登陆*/
+.login_register{ margin-top:0.5em; width:100%; position:relative;}
+.login_register ul{ width:90%; margin:0 auto;}
+.login_register li{ float:left; display:inline; width:50%; text-align:right;}
+.login_register li a{ font-size:1.2em; line-height:2.6em; font-weight:normal; color:#4dd1b0;}
+.login_register h1{ font-size:1.4em; line-height:2.2em; text-align:center; font-weight:normal; color:#4dd1b0;}
+.login_register li.selected a{ font-size:1.4em; line-height:2.2em;}
+.back{ position:absolute; left:3%; top:20%; width:4%;}
+
+.form_box{ width:90%; margin:2em auto 0 auto;}
+.form_box .bor_b{ border-bottom:1px solid #b5b5b5; padding:0.3em 0; margin:0 0 1em 0; position:relative;}
+.form_box .bor_b1{ margin:1em 0 1em 0;}
+.bor_b label{ width:18%; font-size:1.2em; line-height:2em; color:#b5b5b5; position:absolute; left:0; top:15%; transition:all .5s ease; -webkit-transition:all .5s ease;}
+.bor_b input[type=text],.bor_b input[type=password]{ height:2em; line-height:2em; width:100%; color:#8d8594; font-size:1.2em; font-weight:normal; border:0; transition:all .5s ease; -webkit-transition:all .5s ease;}
+.bor_b1 input[type=button]{ width:100%; background:#4dd1b0; border:0; color:#fff; height:2em; font-size:1em; font-weight:normal; border-radius:0.3em; -webkit-border-radius:0.3em;}
+.bor_b1 a{ color:#363636; font-size:0.9em; line-height:1.4em; font-weight:normal; margin-left:0.8em;}
+.bor_b1 a.color1{ color:#feca39; display:none;}
+.phone_box input[type=text]{ width:68%; float:left; display:inline;}
+.phone_box .yanzhengma{ color:#ffb33a; font-size:0.9em; line-height:2em; width:30%; display:inline; text-align:center; float:right; margin:0.4em 0 0 0; position:static;}
+.form_box .no-empty{}
+.no-empty label{ color:#feca39; top:-27%; font-size:0.8em; line-height:1.6em;}
+.form_box .wrong{ border-bottom:1px solid #ff5a60;}
+.wrong label{ color:#ff5a60; top:-27%; font-size:0.8em; line-height:1.6em;}
+
+
+#forget_form label{ width:30%;}
+#forget_form input[type=password]{ width:60%;}
+
+@media screen and (max-width: 320px)  {
+	.phone_box input[type=text]{ width:50%;}
+	.phone_box label.yanzhengma{ width:24%;}
+}

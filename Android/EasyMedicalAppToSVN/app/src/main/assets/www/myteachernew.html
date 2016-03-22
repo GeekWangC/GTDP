@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>我的老师</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+    <div class="back"><a href="lianxi.html"><img src="img/back.png" /></a></div>
+    <div class="message"><a href="###" onclick="saveUrl()"></a></div>
+    <h1>我的老师</h1>
+</div>
+<!--顶部结束-->
+
+<!--收藏开始-->
+<div id="bgwin"></div>
+<div class="course_box">
+     <div class="menu">
+        <div class="tab_ul clearfix">
+            <div class="fleft selected" id="kcall">
+                <a class="select_span">全部老师</a>
+            </div>
+            <div class="fleft" id="lastNew">
+                <a class="select_span">最新</a>
+            </div>
+            <div class="fleft" id="btnsearch">
+                <a>搜索</a>
+            </div>
+        </div>
+        <div class="large_fixed">
+            <ul class="none" id="kcall_list">
+                <li data-id="1" class="selected"><a href="javascript:void(0)">大体病理</a></li>
+                <li data-id="2"><a href="javascript:void(0)">病理学</a></li>
+                <li data-id="3"><a href="javascript:void(0)">组织学</a></li>
+                <li data-id="4"><a href="javascript:void(0)">寄生虫</a></li>
+            </ul>
+            <div class="search_fixed none" id="btnsearchBox">
+                <div id="kcSearch">
+                    <div class="search clearfix">
+                        <form id="formSearch" action="" method="post" class="clearfix">
+                            <input type="text" value="" id="input_search" placeholder="课程关键字"/>
+                            <a href="javascript:void(0)" id="btns_search" class="btns_search"></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="tab_content" id="teachers">
+        <ul>
+         <template v-for="item in items">
+            <li class="clearfix">
+                <div class="li_img_box"><a style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a></div>
+                <div class="li_content_box">
+                    <h1>{{ item.UserName }}</h1>
+                    <h3>职位：教授</h3>
+                    <h3>课件数量：{{ item.CourseWaresCount }} </h3>
+                    <h3 class="color1">{{ item.CourseName }}</h3>
+                </div>
+            </li>
+         </template>
+        </ul>
+    </div>
+</div>
+<!--收藏结束-->
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+//数组去重
+Array.prototype.unique = function(){
+    var n = []; //一个临时数组
+    for(var i = 0; i < this.length; i++) //遍历当前数组
+    {
+        //如果当前数组的第i已经保存进了临时数组，那么跳过，
+        //否则把当前项push到临时数组里面
+        if (n.indexOf(this[i]) == -1){n.push(this[i])};
+    }
+    return n;
+}
+$(function(){
+
+    $(".tab_ul .fleft").click(function(){
+        $(this).addClass("selected").siblings().removeClass("selected");
+        if($(this).attr('id') == 'kcall'){
+            $("#saveall_list,#btnsearchBox").hide();
+            if($("#kcall_list").is(":hidden")){
+                $("#kcall_list,#bgwin").show();
+                $("#bgwin").css({'opacity':'0.5'});
+            }else {
+                $("#kcall_list,#bgwin").hide();
+            }
+            var codetxt = $(this).find('.select_span');
+            $("#kcall_list li").click(function(){
+                $(this).addClass("selected").siblings().removeClass("selected");
+                codetxt.text($(this).text());
+                $("#kcall_list,#bgwin").hide();
+
+                 $("#courseid").val($(this).attr("data-id"));
+
+            });
+        } else if($(this).attr('id') == 'lastNew'){
+            $("#kcall_list,#btnsearchBox,#bgwin").hide();
+        } else if($(this).attr('id') == 'btnsearch'){
+            $("#kcall_list,#notread_list,#bgwin").hide();
+            if($("#btnsearchBox").is(":hidden")){
+                $("#btnsearchBox,#bgwin").show();
+                $("#bgwin").css({'opacity':'0.5'});
+            }else {
+                $("#btnsearchBox,#bgwin").hide();
+            }
+        } else {
+            $("#notread_list,#kcall_list,#btnsearchBox,#bgwin").hide();
+        }
+    });
+
+    var url = "http://115.29.97.231:3000/api/Mobile/GetAllTeachers?IsNew=false";
+    var result = WAjax(url,'get');
+    for (var i = 0;i<result.length; i++) {
+        result[i].CourseName = result[i].CourseName.unique().join('、');
+    };
+    var teachers = new Vue({
+        el:'#teachers',
+        data:{
+            items:result
+        }
+    })
+//=======================全部==================
+    $('#all').on('click',function(e) {
+        var url = "http://115.29.97.231:3000/api/Mobile/GetAllTeachers?IsNew=false";
+        var result = WAjax(url,'get');
+        for (var i = 0;i<result.length; i++) {
+            result[i].CourseName = result[i].CourseName.unique().join('、');
+        };
+        teachers.items = result;
+    })
+
+    //=======================根据ID==================
+    var courseId =$("#courseid").val()||"";
+    $('#kcall_list').on('click',function(e) {
+        var url = "http://115.29.97.231:3000/api/Mobile/GetAllTeachers?IsNew=false&courseId=" + courseId;
+        var result = WAjax(url,'get');
+        for (var i = 0;i<result.length; i++) {
+            result[i].CourseName = result[i].CourseName.unique().join('、');
+        };
+        teachers.items = result;
+    })
+//=======================最新==================
+    $('#new').on('click',function(e) {
+        var url = "http://115.29.97.231:3000/api/Mobile/GetAllTeachers?IsNew=true";
+        var result = WAjax(url,'get');
+        for (var i = 0;i<result.length; i++) {
+            result[i].CourseName = result[i].CourseName.unique().join('、');
+        };
+        teachers.items = result;
+    })
+//=======================搜索==================
+    $('#search').on('click',function  (e) {
+        e.preventDefault();
+        var name = $('#input_search').val();
+        var url = "http://115.29.97.231:3000/api/Mobile/Search?name="+name;
+        var result = WAjax(url,'get');
+        var resultlist = new Array();
+        result.UserList[0].CourseName = result.UserList[0].CourseName.unique().join('、');
+        resultlist.push(result.UserList[0]);
+        console.log(result.UserList[0]);
+        teachers.items = resultlist;
+    })
+    /*返回*/
+    $(".back").on("tap",function(){
+        //window.location.href = "course.html";
+        common.goToHistoryPage();
+    });
+    $("#btns_search").on("tap",function(){
+        getlist();
+    })
+});
+
+function saveUrl(){
+    localStorage["saveUrl"] = window.location.href;
+    window.location.href="messages.html";
+
+}
+    
+</script>
+</body>
+</html>

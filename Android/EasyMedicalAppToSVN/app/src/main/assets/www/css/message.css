@@ -1,0 +1,35 @@
+/* CSS Document */
+
+body{ background:#eee;}
+img{ width:100%;}
+.none{ display:none;}
+
+/*顶部*/
+.top{ width:100%; background:#4dd1b0; padding:3% 0; position:fixed; top:0; left:0; z-index:99;}
+.top .back{ position:absolute; left:3%; top:20%; width:4%;}
+.top h1{ color:#fff; font-size:20px; line-height:1.2; text-align:center; letter-spacing:2px; font-weight:normal;}
+
+.message_box{ width:100%;}
+.message_box .tab_ul{ width:100%; list-style:none; background:#fff;}
+.tab_ul li{ float:left; width:43%; text-align:center; font-size:1.2em; line-height:3; margin:0 4%;}
+.tab_ul li:last-child { margin:0 4% 0 0;}
+.tab_ul li.selected{ border-bottom:3px solid #ffb33a;}
+.tab_content{ width:100%; margin-top:0.5em;}
+.tab_content_list{ width:100%; line-height:none;}
+.tab_content_list li{ background:#fff; margin:0.3em 0; padding:0.4em 4%; position:relative;}
+.tab_content_list li .touxiang{ float:left; display:inline; width:18%;}
+.touxiang img{ border-radius:50%; -webkit-border-radius:50%;}
+.tab_content_list li .nameBox{ float:left; display:inline; width:40%; margin:0.4em 0 0 0.4em;}
+.nameBox h2{ color:#4f4f4f; font-size:1.2em; line-height:1.5; font-weight:normal;}
+.nameBox p{ color:#d2d2d2; font-size:1.1em; line-height:1.5; font-weight:normal; text-indent:0;}
+.tab_content_list li .huifu{ float:right; display:inline; width:17%; color:#4dd1b0; font-size:1.2em; line-height:1.3; font-weight:normal; margin-top:4%;}
+.huifu span{ display:block; float:left; width:35%;}
+.tab_content_list li .huifuContent{ width:100%; color:#000; font-size:1.2em; line-height:1.5; font-weight:normal; margin:0.4em 0;}
+.huifuContent span,.Contents span{ color:#4dd1b0;}
+.tab_content_list li .Contents{ width:94%; color:#626262; font-size:1.1em; line-height:1.5; font-weight:normal; margin:0 auto;}
+.Contents p.title{ color:#555; font-size:1.2em; line-height:1.5; padding-top:0.4em;}
+.Contents span.imgs{ width:30%; display:block; float:left; margin:0 0.4em 0 0;}
+
+@media screen and (max-width: 320px)  {
+	
+}

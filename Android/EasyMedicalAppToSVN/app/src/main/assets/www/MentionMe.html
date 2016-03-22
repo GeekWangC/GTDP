@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>联系人</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/sendmsg.css"/>
+</head>
+
+<body>
+<div class="contacts_fixed" id="top">
+    <!--顶部开始-->
+    <div class="top1" onclick="back('','','')">
+        <div class="back"><a href="###">取消</a></div>
+        <h1>联系人</h1>
+    </div>
+    <!--顶部结束-->
+
+    <!--搜索开始-->
+    <div class="contact_search">
+        <div class="box clearfix">
+            <form id="form1" action="" method="post">
+                <input type="text"  id="searchId" placeholder="搜索"></input>
+                <a href="###" id="search_btns" onclick="searchButton()"><img src="img/search.png"/></a>
+            </form>
+        </div>
+    </div>
+    <!--搜索结束-->
+</div>
+
+<!-- ------------联系人列表  开始-----------------> -->
+<div class="contact_box" id="example-1">
+
+    <div id="newPeople">
+    <h3 id="abcd" >最近联系人</h3>
+    <ul >
+        <template v-for="people in newPeople">
+        <li class="clearfix"  onclick="choose({{ people.id }},'{{ people.name }}','{{people.Icon}}')">
+            <img v-if="people.Icon == 'null'" src="img/li-img.png" align="left"/>  
+            <img  src="http://115.29.97.231:3000/{{people.Icon}}" align="left"  v-else/>
+            <a>{{ people.name }}</a>
+        </li>
+        </template>
+    </ul>
+    </div>
+    <template v-for="itemsons in items">
+        <h3 id="{{ itemsons.thiskey }}">{{ itemsons.thiskey }}</h3>       
+        <ul >
+            <template v-for="itemsonss in itemsons.thisvalue">
+            <li class="clearfix" id="{{ itemsonss.ID }}" onclick="choose({{ itemsonss.ID }},'{{ itemsonss.UserName }}','{{itemsonss.Icon}}')">
+
+
+                <img v-if="itemsonss.Icon == null" src="img/li-img.png" align="left"/>  
+                <img  src="http://115.29.97.231:3000/{{itemsonss.Icon}}" align="left"  v-else/>      
+                <a>{{ itemsonss.UserName }}</a>
+            </li>
+            </template>
+
+        </ul>
+     </template>
+</div>
+
+<!-- 联系人列表  结束 -->
+
+
+<!-- 字母列表  开始 -->
+<div class="letter_fixed">
+    <ul>
+        <li><a href="javascript:void(0);" onclick="jump('a')">A</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('b')">B</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('c')">C</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('d')">D</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('e')">E</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('f')">F</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('g')">G</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('h')">H</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('i')">I</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('g')">G</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('k')">K</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('l')">L</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('m')">M</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('n')">N</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('o')">O</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('p')">P</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('q')">Q</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('r')">R</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('s')">S</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('t')">T</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('u')">U</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('v')">V</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('w')">W</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('x')">X</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('y')">Y</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('z')">Z</a></li>
+        <li><a href="javascript:void(0);" onclick="jump('#')">#</a></li>
+    </ul>
+</div>
+<!-- 字母列表  结束 -->
+
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+    <script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/makePy.min.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/lianxi.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+
+//联系人跳转
+function jump(value){
+
+    if (document.getElementById(value) != undefined) {
+        var topHeight = document.getElementById("top").offsetHeight;
+        var lettersclickoffsetTop = document.getElementById(value).offsetTop;
+        document.body.scrollTop = lettersclickoffsetTop - topHeight;
+    };
+}
+
+// allPeopleArray 所有联系人
+
+var allPeopleArray,qtArray,lastArray;
+
+ var example1 = new Vue({
+      el: '#example-1',
+       data: {
+             items: "",
+             newPeople:"",
+
+             }
+    })  
+var parentID,dataID,commentContent,type,QuestionNumber,ExerciseID,QuestionID,newPeopleArray,qtseparatePeopleArray;
+$(function(){   
+    $(".contact_box").css({'margin-top':$(".contacts_fixed").height()});
+
+    parentID = getParamUrl("parentID");
+    dataID = getParamUrl("dataID");
+    commentContent = getParamUrl("commentContent");
+    type = getParamUrl("type");
+    QuestionNumber = getParamUrl("QuestionNumber");
+    ExerciseID = getParamUrl("ExerciseID");
+    QuestionID = getParamUrl("QuestionID");
+    
+
+    var url = "http://115.29.97.231:3000/api/Mobile/GetStuOfGrade";
+    var method = "get";
+    var result = WAjax(url,method);
+
+
+    qtArray = [];
+    allPeopleArray = new Array()
+    allPeopleArray = result.slice(0);
+
+    for (var i = 0; i < allPeopleArray.length; i++) {
+        allPeopleArray[i]["az"]=(makePy(allPeopleArray[i].UserName))[0];
+    };
+    allPeopleArray.sort(getSortFun("asc","az"));
+
+
+    lastArray = [];
+    qtseparatePeopleArray={};
+    getList();
+    lastArray.push(qtseparatePeopleArray);
+    example1.items = lastArray;
+
+
+    // 获取缓存最近联系人
+    getNewPeopleList();
+
+}); 
+
+
+var isqt=true;
+function getList(){
+
+    var separatePeopleArray = {};
+
+    if (allPeopleArray.length>0){
+        var ss=makePy(allPeopleArray[0].UserName);
+
+        if (isaz(makePy(allPeopleArray[0].UserName))) {
+            
+            separatePeopleArray["thiskey"] = makePy(allPeopleArray[0].UserName);
+            separatePeopleArray["thisvalue"] = getArray();
+
+            lastArray.push(separatePeopleArray);
+
+             // separatePeopleArray[makePy(allPeopleArray[0].UserName)] = getArray();
+        }
+        else if (isqt) {
+            isqt = false;
+            getArray();
+            qtseparatePeopleArray["thiskey"] = "#";
+            qtseparatePeopleArray["thisvalue"] = qtArray;
+        }
+        getList();
+        
+    };
+
+
+}
+
+function getNewPeopleList(){
+
+    linkManArray = [];
+    linkManArray = JSON.parse(localStorage.getItem("linkMan"));
+    if (linkManArray != null) {
+        $("#newPeople").css({'display':'block'});
+
+        var rearray = linkManArray.slice(0);
+
+        example1.newPeople = rearray.reverse();
+    }else{
+        linkManArray = [];
+        $("#newPeople").css({'display':'none'});
+    }
+}
+
+function getArray(){
+     var p=0,m;
+    
+    var newArr = [];
+    var n=makePy(allPeopleArray[0].UserName);
+    for(var i = 0;i<=allPeopleArray.length;i++){
+
+        if (i == 0) {
+                m=makePy(allPeopleArray[i].UserName);
+            }else{
+                p = p+1;
+                m = makePy(allPeopleArray[i-p].UserName);
+            }
+
+
+            if (isaz(n)) {//首字母是字母
+
+                if(n[0] == m[0]){
+
+                    if (i == 0) {
+                        newArr.push(allPeopleArray[i]);
+                        allPeopleArray.splice(i,1);
+                        
+                    }else{
+                        newArr.push(allPeopleArray[i-p]);
+                        allPeopleArray.splice(i-p,1);
+                        
+                    }
+
+                }
+
+            }else{//首字母非字母且只调用一次
+
+               if (i == 0) {
+                        qtArray.push(allPeopleArray[i]);
+                        allPeopleArray.splice(i,1);
+                        
+                    }
+                    // else{
+                    //     qtArray.push(allPeopleArray[i-p]);
+                    //     allPeopleArray.splice(i-p,1);
+                        
+                    // }
+            }
+    }
+    return newArr;
+}
+
+
+
+
+function searchButton(){
+    if ($("#searchId").val() == "") {
+        alert("请输入搜索内容");
+        return;
+    };
+
+    var n=makePy($("#searchId").val());
+    if (isaz(n)) {
+
+        jump(n);
+        
+    }else{
+        jump("#");
+    }
+
+}
+// 是否为字母
+function isaz(value){
+    var str = /^[A-Za-z]*$/;
+    if (str.test(value))
+    {
+        return true;
+    }
+    return false;
+}
+
+
+function getPeople(people){
+
+    if (linkManArray.length>0) {
+
+        for (var i = 0; i < linkManArray.length; i++) {
+            if (linkManArray[i].id == people.id) {
+                linkManArray.splice(i,1);
+            }
+        };
+
+        if (linkManArray.length >= 3) {
+            linkManArray.splice(0,1);
+        }
+
+    }
+    linkManArray.push(people);
+    linkManArray = JSON.stringify(linkManArray);
+    localStorage["linkMan"] = linkManArray;
+}
+
+function choose(id,name,Icon){
+
+    
+    var people={};
+    people.name=name;
+    people.id=id;
+    people.Icon=Icon;
+    getPeople(people);
+    back(id,name,Icon);
+}
+
+function back(id,name,Icon){
+    window.location.href="remessage.html?parentID="+parentID+"&dataID="+dataID+"&commentContent="+commentContent+"&mentionMe="+id+"&name="+name+"&ExerciseID="+ExerciseID+"&type="+type+"&QuestionNumber="+QuestionNumber+"&QuestionID="+QuestionID;
+}
+
+
+
+
+</script>
+</body>
+</html>

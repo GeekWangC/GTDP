@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- 登录页面 -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录</title>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+<body>
+	<div id="login_register" class="top">
+	    <a href="register.html" id="top_cancle" class="cancle">注册</a>
+	    <h1>登录</h1>
+	</div>
+	<div class="form_box" id="denglu">
+	    <form id="loginForm" action="" method="post">
+	        <div class="bor_b"><label for="userName">学号</label><input type="text" value="" id="userName" name="userName"/></div>
+	        <div class="bor_b"><label for="password">密码</label><input type="password" value="" id="password" name="password"/></div>
+	        <div class="bor_b"><label for="user_IP">IP地址</label><input type="text" value="" id="user_IP"/></div>
+	        <div class="bor_b1"><a id="login_in" class="loginR">登  录</a></div>
+	        <div class="bor_b1 a_right"><a href="###" class="color_ip">记住IP地址</a><a href="javascript:void(0);" id="forget_Password" class="forget_a">忘记密码</a></div>
+	    </form>
+	</div>
+
+	<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+	<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="js/login.js" type="text/javascript" charset="utf-8" ></script>
+	<script>
+	$(function(){
+		//登录提交
+		$("#login_in").on('tap', function () {
+		    var userInfo  = $('form').serialize();
+		    var url = common.interfaceBase + "Login?"+userInfo;
+		    var method = "post";
+		    var result = WAjax(url,method);
+		    if(result){
+		    	var loginResult = true;
+		    	var userInfo = sessionStorage.USERINFO;
+		    	sessionStorage.isShowQPLoger = true;
+		    	if(common.isAndroid){
+	                window.local_obj.getLoginResult(loginResult,userInfo);
+		    	}else if(common.isiOS){
+	    		    var url="UserInfo:"+userInfo;
+                    document.location = url;
+		    	}else{
+		    		var url="UserInfo:"+userInfo;
+                    document.location = url;
+		    	}
+		    }else{
+				//错误或者为空时添加类wrong
+				$(".form_box").find(".bor_b").addClass("wrong");
+		    	console.log("用户名和密码错误能不能好好输入");
+		    }
+		});
+		//忘记密码
+		$("#forget_Password").on('tap',function(){
+			window.location.href = "forgetPassword.html";
+		})
+	})
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>模考历史</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common.css"/>
+<link rel="stylesheet" type="text/css" href="css/cut.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+	<div class="back" id="back"<a href="###"><img src="img/back.png" /></a></div>
+	<div class="message"><a href="###" onclick="saveUrl()"><img src="img/chat.png" /></a></div>
+    <h1 id='titleText'></h1>
+</div>
+<!--顶部结束-->
+
+<!--练习历史列表开始-->
+<div class="exercise_list exercisehistory_list" id="exam_history">
+	<ul>
+    	<li v-for="item in items">
+        <div onclick="gotoreport('report.html?ExerciseID={{item.Id}}&name={{item.ExerciseName}}')">
+        <a >{{item.ExerciseName}}</a>
+        <p><span>{{item.CreateDate}},共{{item.QuestionNum}}题，得分{{item.Score}}</span></p>
+        </div>
+        </li>
+    </ul>
+</div>
+<!--练习历史列表结束-->
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+
+
+$(function(){
+    $(".exercise_list").css({'margin-top':$(".top").height()+10});
+    if (getParamUrl("type") == 1) {//练习历史
+        document.getElementById("titleText").innerText="练习历史";
+    }else{
+        document.getElementById("titleText").innerText="模考历史";
+    }
+    var url = "http://115.29.97.231:3000/api/Mobile/GetExerHistory"+"?type="+getParamUrl("type");;
+    var method = "get";
+    var result = WAjax(url,method);
+    //练习历史
+    var example1 = new Vue({
+        el: '#exam_history',
+        data: {
+            items: result
+        },
+    })
+});
+function saveUrl(){
+    localStorage["saveUrl"] = window.location.href;
+    window.location.href="messages.html";
+
+}
+
+$("#back").on('click',function(){
+    var type=getParamUrl("type");
+    if (type == 1) {//练习历史
+        window.location.href="lianxi.html";
+    }else{//
+        window.location.href="simulationtest.html";
+    }
+});
+     
+function gotoreport(aa){
+    window.location.href=aa+"&type="+getParamUrl("type");
+}
+</script>
+</body>
+</html>

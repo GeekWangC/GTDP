@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>搜索结果页</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+<style>
+body{ background:#eee;}
+</style>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top clearfix" id="top1">
+    <div class="search">
+        <form id="formSearch" action="" method="post" class="clearfix">
+            <input type="text" value="" id="input_search" placeholder="切片、课程、老师..."/>
+            <a href="javascript:void(0)" id="btns_search" class="btns_search"></a>
+        </form>
+    </div>
+    <a href="index.html" id="top_cancle" class="cancle">取消</a>
+</div>
+<div class="course_box">
+<div class="search_content_box" id="search_list">
+	<ul>
+    	<li class="clearfix" v-for="Curriculum in CurriculumList">
+        	<div class="list-img"><img src="img/0_thumb.jpg"/><a style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a></div>
+            <div class="li_content_box clearfix">
+            	<h3>{{ Curriculum.Name }}</h3>
+            	<p>{{ Curriculum.CourseName }}</p>
+                <div class="btnsBoxs star" onclick="collect({{Curriculum.Id}},4)"><span><img id = "{{Curriculum.Id}}" src="img/star-gray.png"/></span></div>
+            </div>
+        </li>
+        <li class="clearfix" v-for="CourseWare in CourseWareList">
+        	<div class="list-img"><img src="img/0_thumb.jpg"/><a style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></div>
+            <div class="li_content_box clearfix">
+            	<h3>{{ CourseWare.Name }}</h3>
+            	<p>{{ CourseWare.Description }}</p>
+                <div class="btnsBoxs star" onclick="collect({{CourseWare.id}},5)"><span><img id = "{{Curriculum.Id}}" src="img/star-gray.png"/></span></div>
+            </div>
+        </li>
+       <li class="clearfix" v-for="Question in QuestionList">
+            <div class="list-img"><img src="img/0_thumb.jpg"/><a style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></div>
+            <div class="li_content_box clearfix">
+                <h3>{{ Question.CourseName }}</h3>
+                <p>{{ Question.Content }}</p>
+                <div class="btnsBoxs star" onclick="collect({{Question.QuestionId}},1)"><span><img id = "{{Question.QuestionId}}" src="img/star-gray.png"/></span></div>
+            </div>
+        </li>
+        <li class="clearfix" v-for="Slice in SliceList">
+            <div class="list-img"><img src="img/0_thumb.jpg"/><a style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></div>
+            <div class="li_content_box clearfix">
+                <h3>{{ Slice.Name }}</h3>
+                <p>{{ Slice.Description }}</p>
+                <div class="btnsBoxs star" onclick="collect({{Slice.SliceID}},2)"><span><img id = "{{Slice.SliceID}}" src="img/star-gray.png"/></span></div>
+            </div>
+        </li>
+        <li class="clearfix" v-for="Exercise in ExerciseList">
+            <div class="list-img"><img src="img/0_thumb.jpg"/><a style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></div>
+            <div class="li_content_box clearfix">
+                <h3>{{ Exercise.ExerciseName }}</h3>
+                <p></p>
+                <div class="btnsBoxs star" onclick="collect({{Exercise.Id}},3)"><span><img id = "{{Exercise.Id}}" src="img/star-gray.png"/></span></div>
+            </div>
+        </li>
+    </ul>
+</div>
+</div>
+<!--顶部结束-->
+
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/makePy.min.js" type="text/javascript" charset="utf-8" ></script>
+
+<script>
+window.onload = function(){
+    $(document).find(".list-img img").css({'height':$(".li_content_box").height()-3,'width':'auto'});
+}
+$(function(){	
+	var fixedHeight = $(".fixed_foot").height();
+	$(".search_content_box").css({'padding-bottom':fixedHeight + 20});
+	$(".search_content_box").css({'top':$("#top").height()});
+    var name = getParamUrl("text");
+    var type = 0;
+
+    var searchlist = new Vue({
+        el: '#search_list',
+        data: {
+            CurriculumList:[],
+            CourseWareList:[],
+            QuestionList:[],
+            SliceList:[],
+            ExerciseList:[]
+        },
+     
+    })
+     searchhttp(name);
+
+     function searchhttp(name){
+        var url = "http://115.29.97.231:3000/api/Mobile/Search?name=" + name;
+        var method = "get";
+        var result = WAjax(url,method);
+
+            searchlist.CurriculumList = result.CurriculumList;
+            searchlist.CourseWareList = result.CourseWareList,
+            searchlist.QuestionList = result.QuestionList,
+            searchlist.SliceList = result.SliceList,
+            searchlist.ExerciseList = result.ExerciseList
+      
+
+    }
+
+});
+
+function collect(id,type){
+            //alert(id);
+            //收藏和取消
+            if ($("#"+id+"").attr('src')=="img/star-gray.png"){//收藏
+                document.getElementById(id).src="img/star-gray1.png";
+         
+                var url = "http://115.29.97.231:3000/api/Mobile/AddCollection/"+ id +"?collectType=" + type;
+                var method = "post";
+                var result = WAjax(url,method);
+
+            }else{//取消收藏
+                document.getElementById(id).src="img/star-gray.png";
+
+                var url = "http://115.29.97.231:3000/api/Mobile/DeleteCollection/"+ id +"?collectType=" + type;
+                var method = "post";
+                var result = WAjax(url,method);
+        }
+
+}
+
+
+var recordArray=[];
+// 点击搜索
+
+$("#btn-search").on("click",function(){
+    getrecordArray();
+    var text=$("#input_search").val();
+    if (recordArray.length>0) {
+        for (var i = 0; i < recordArray.length; i++) {
+            if (recordArray[i] ==  text){
+                recordArray.splice(i,1);
+            }
+        };
+
+        if (recordArray.length >= 40) {
+            recordArray.splice(0,1);
+        }
+    }
+    recordArray.push(text);
+    recordArray = JSON.stringify(recordArray);
+    localStorage["recordOfHistory"] = recordArray;
+    window.location.href="searchresult.html?text="+text;
+
+});
+
+function getrecordArray(){
+    if(localStorage.getItem("recordOfHistory") == ""){
+        recordArray = [];
+    }else{
+      recordArray = JSON.parse(localStorage.getItem("recordOfHistory"));  
+    }
+}
+
+</script>
+</body>
+</html>

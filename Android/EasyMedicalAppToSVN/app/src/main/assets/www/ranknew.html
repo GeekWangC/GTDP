@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>积分排名榜</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top" id="topShaow">
+   <div class="back" style="top:1%;left:0;width:10%;height:100%;background-image: url(img/back.png);background-size: 41% 61%;background-repeat: no-repeat;background-position:center;"></div>
+    <h1>积分排名榜</h1>
+</div>
+<!--顶部结束-->
+
+<!--奖杯开始-->
+<div class="jifen_jiangbei" id="top">
+	<img src="img/jiangbei.png"/>
+    <div class="title"><a>{{ top.UserName }}占据了今天的榜首</a></div>
+</div>
+<!--奖杯结束-->
+
+<!--列表开始-->
+<div class="paihang_list" id="myinfo">
+    <ul>
+        <li class="clearfix">
+            <p class="num">&nbsp;</p>
+            <img src="{{ myinfo.Icon }}"/>
+            <p><a class="names">{{ myinfo.UserName }}</a><a class="numbers">第{{ myinfo.MyRanking }}名</a></p>
+            <span>{{ myinfo.TotalScore }}</span>
+        </li>
+    </ul>
+</div>
+
+
+<div class="paihang_list" id="rank">
+	<ul>
+     <template v-for="item in items">
+    	<li class="clearfix">
+        	<p class="num">{{ $index+1 }}</p>
+        	<img src="{{ item.Icon }}"/>
+            <p>{{ item.UserName }}</p>
+            <span>{{ item.TotalScore }}</span>
+        </li>
+    </template>
+    </ul>
+</div>
+<!--列表结束-->
+</div>
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+$(function(){		
+    var url =  common.interfaceBase + "GetScoreRank";
+    var result = WAjax(url,'get');
+    result.forEach(function(e){
+                if(e.ThumbnailUrl){
+                    e.ThumbnailUrl= common.sliceImgBase + e.ThumbnailUrl+"')";
+                }else{
+                    e.ThumbnailUrl= "url(img/li-img.png)";
+                }
+            })
+    // console.log(result);retur;n false
+    //榜首
+    var top = new Vue({
+        el:"#top",
+        data:{
+            top:result[0]
+        }
+    })
+    //排行
+    var rank = new Vue({
+        el:'#rank',
+        data: {
+            items:result
+        }
+    })
+    //自己的积分和排名 
+    var url = common.interfaceBase "GetMyInfo";
+    var myinfo = WAjax(url,'get');
+    var myinfo = new Vue({
+        el:'#myinfo',
+        data:{
+            myinfo:myinfo
+        }
+    })
+    $('#body').show();
+	// $(".jifen_jiangbei").css({'margin-top':$(".top_jifen").height()});
+
+     /*返回*/
+    $(".back").on("tap",function(){
+        //window.location.href = "course.html";
+        common.goToHistoryPage();
+    });
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!-- 课程首页 -->
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>课程</title>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+<body id="course-detail">
+<div id="noscreen">
+	<!--顶部开始-->
+	<div class="top">
+		<div class="back" ><span href="javascript:void(0);"><img src="img/back.png" /></span></div>
+		<div class="more"><a href="###">。。。</a></div>
+	    <h1>{{detail.Name}}({{currentPPTPage}}/{{detail.totalPage}})</h1>
+	    <input type="hidden" id="step" />
+	</div>
+	<!--顶部结束-->
+
+	
+
+	<div class="taolun_box">
+		<div class="course_info_img" id="full-screen">
+		    <img :src="currentPpt"/>
+		    <div class="screen"><img src="img/screen.png"/></div>
+		</div>
+		<div class="tabs clearfix">
+	        <a class="selected" data-id="pinglun">课件讨论</a>
+	        <a data-id="courseBiji">读书笔记</a>
+	        <a data-id="lianxi" class="exercise"><span></span>练习</a>
+	    </div>
+	    <div class="taolun_list">
+	    	<div id="pinglun">
+	        	<ul class="tab_content_list" >
+	            	<li class="clearfix" v-for="courseComment in courseComments  | orderBy 'creatTime' -1 ">
+	                	<div class="touxiang"><img :src="courseComment.userIcon"/></div>
+	                    <div class="nameBox">
+	                        <h2 v-text="courseComment.userName"></h2>
+	                        <p v-text="courseComment.commentContent" class="color"></p>
+	                        <span v-text="courseComment.newcreatTime" class="times"></span>
+	                        <div class="reply" v-on:tap="replayComment($event);" data-commentid="{{courseComment.commentID}}"><span><img src="img/huifu.png"/></span>回复</div>
+	                    </div>
+	                </li>
+	            </ul>
+	            <div class="pinglun_fixed">
+	                <form id="pinglunForm" action="" method="post">
+	                    <input type="text" value="" id="txt_pinglun"/>
+	                    <a type="button" id="btn_pinglun" >评论</a>
+	                </form>
+	            </div>
+	        </div>
+	        <div id="courseBiji" class="none">
+	        	<template v-for="note in noteList  | orderBy 'Date' -1">
+		        	<p class="xinde" v-text="note.Contetnt"></p>
+		        </template>
+	            <div class="pinglun_fixed_xinde">
+	                写心得
+	            </div>
+	        </div>
+	        <div id="courseLianxi" class="none">
+	        	<p v-text="section.Content"></p>
+	        </div>
+	    </div>
+	</div>
+</div>
+<div id="toscreen" style="display: none;">
+	<p id="ceshiwang">我的全屏</p>
+	<div class="course_info_img" id="full-screen">
+	    <img :src="currentPpt"/>
+	    <div class="screen"><img src="img/screen.png"/></div>
+	</div>
+</div>
+
+	<!--功能键弹框开始-->
+	<function-component><!--功能键弹框--></function-component>
+	<!--功能键弹框结束-->
+	<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+	<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="Component/functionComponent.js" type="text/javascript" charset="utf-8" ></script>
+	<script>
+	$(function(){
+		$(".tabs a").click(function(){
+			$(this).addClass("selected").siblings().removeClass("selected");
+			var dataID = $(this).data('id');
+			$("#" + dataID).removeClass("none").siblings().addClass("none");
+		});
+		$(".more").click(function(){
+             if(common.isiOS){
+            	window.location="IOS:notDisplayStatuesListNotScroll";
+             }
+			$("#bgwin").css({'display':'block'});
+			$(".fixed_list").show();
+		});
+		$(document).on("click",".cancleImg",function(){
+			$("#bgwin,.fixed_list").hide();
+		});
+		/*ajax链接获取数据*/
+    	var id = getParamUrl("id") || courseId();
+		var url = common.interfaceBase + "getCourseware/"+id;
+		var method = "get";
+		var result = WAjax(url,method);
+		common.contactUrl(result.pageList,"url",common.coursePPT);
+		courseDetail.courseDetailV.detail = result;
+		courseDetail.courseDetailV.currentPpt = result.pageList[0].url;
+		courseDetail.courseDetailV.currentPpt = result.pageList[0].url;
+		var pptCount = result.totalPage;
+		$(".course_info_img").on("swipeLeft",function(){
+			courseDetail.pptTogeSwipr(result,"right",pptCount)
+		});
+		$(".course_info_img").on("swipeRight",function(){
+			courseDetail.pptTogeSwipr(result,"left",pptCount)
+		});
+		courseDetail.getComment();
+		$("#btn_pinglun").on("tap",courseDetail.sendComment);
+		$(".reply").on("tap",courseDetail.replayComment);
+		$(".tab_ul li").on("tap",function(){//tab页签切换
+			$(this).addClass("selected").siblings().removeClass("selected");
+			var dataID = $(this).data('id');
+			$("#" + dataID).removeClass("none").siblings().addClass("none");
+			if($(this).attr("data-id")=="courseBiji"){
+				courseDetail.getNoteList();
+			}else if($(this).attr("data-id")=="courseLianxi"){
+				courseDetail.getSection();
+			}
+		});
+		$(".screen").on("tap",function(){
+			$("#noscreen").hide();
+			$("#toscreen").show();
+		})
+	});
+	/*课件详情模块*/
+	var courseDetail = {};
+	//课件详情
+	courseDetail.courseDetailV = new Vue({
+		el: '#course-detail',
+		data: {
+			detail: [],
+			currentPpt:"",//当前ppt图片
+			currentDefaultPpt:"",//当前ppt默认图片
+			currentPPTPage:1,//当前ppt页码
+			courseComments:[],//l留言
+			noteList:[],//读书笔记
+			section:""//课件练习
+		},
+		// 在 `methods` 对象中定义方法
+		methods: {
+			replayComment:function(e){
+				var parentID = e.target.parentElement.dataset.commentid || e.target.dataset.commentid;
+				var dataID = getParamUrl("id");
+				var commentType = 3;
+				var data = {
+					parentID:parentID,
+					dataID:dataID,
+					commentType:commentType
+				}
+				common.recordHistory(window.location.href);
+				window.location.href="remessage.html?data="+JSON.stringify(data);
+		      	/*window.location.href="remessage.html?parentID="+conmmentid+"&dataID="+dataID+"&QuestionNumber="+QuestionNumber+"&ExerciseID="+ExerciseID+"&QuestionID="+QuestionID+"&type=3";*/
+			}
+		}
+	});	
+	courseDetail.pptTogeSwipr = function(result,dir,count){//ppt切换
+		var count = count || 0;
+		var dir = dir || "right";
+		var page = document.getElementById("step").getAttribute("step");
+		if(page== null) page=0; 
+        if(dir=='left'){ 
+            (page==0)? page=count-1:page--; 
+        }else if(dir=='right'){ 
+            (page==count-1)? page=0:page++; 
+        } 
+        courseDetail.courseDetailV.currentPpt = result.pageList[page].url;
+        courseDetail.courseDetailV.currentPPTPage = page +1;
+        document.getElementById("step").setAttribute("step",page);
+	};
+	courseDetail.getComment = function(){//获取评论
+		var url = common.interfaceBase + "GetCommentFromId/"+getParamUrl('id')+"?commentType=3";
+		var commentOfCourse = WAjax(url,"get");
+		commentOfCourse.forEach(function(e){
+			if(e["creatTime"]){
+				e["newcreatTime"]=new Date(e["creatTime"]).format("yyyy年MM月dd日"); 
+			}
+		})
+		courseDetail.courseDetailV.courseComments = commentOfCourse;
+	}
+	courseDetail.sendComment = function(){//发表评论
+		var url = common.interfaceBase + "SendComment?commentContent="+$("#txt_pinglun").val()+"&parentID=&dataID="+getParamUrl('id')+"&commentType=3&mentionMe=&picLable=";
+        var method = "post";
+        var result = WAjax(url,method);
+        if(result){
+        	courseDetail.getComment();
+        	$("#txt_pinglun").val("");
+        }
+	};
+	courseDetail.getNoteList = function(){//获取读书笔记
+		var url = common.interfaceBase + "getNoteList/"+getParamUrl('id');
+        var method = "get";
+        var result = WAjax(url,method);
+        courseDetail.courseDetailV.noteList = result;
+	};
+	courseDetail.sendNote = function(){//保存图书笔记
+		var url = base + "postNote";
+		var method = "post";
+		var data = { 
+			"wareId": 14,
+			"content": "听说这个课件不难",
+			"img": [
+				"sample string 1",
+				"sample string 2"
+			]
+		};
+	    var result = WAjax(url,method,data);
+	};
+	courseDetail.getSection = function(){//获取课件练习
+		var url = common.interfaceBase + "getQuiz?QuizID="+getParamUrl('id');
+        var method = "get";
+        var result = WAjax(url,method);
+        courseDetail.courseDetailV.section = result;
+	}
+	// ios 传的课程ID
+	function courseId(Id){
+        //alert(Id);
+		return Id;
+        
+    }
+    function hengshuping(){
+		if(window.orientation==180||window.orientation==0){
+		    $("#ceshiwang").val("竖屏");    
+		}
+		if(window.orientation==90||window.orientation==-90){
+		    $("#ceshiwang").val("横屏");      
+		}
+	}
+	window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", hengshuping, false);
+
+	/*$("#messageID").on('tap',function(){
+		localStorage["saveUrl"] = "courseDetail.html";
+    	window.location.href='messages.html';
+	});
+
+	$("#courseID").on('tap',function(){
+	    window.location.href='course.html';
+	});*/
+	$(".back").on("tap",function(){
+		common.backHistory();
+	})
+    
+    
+
+
+	</script>
+</body>
+</html>

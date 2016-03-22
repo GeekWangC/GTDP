@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>组卷模考</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+<style>
+body{ background:#f5f4f4;}
+</style>
+</head>
+
+<body>
+<div class="exam_before">
+	<p class="title">组卷模考</p>
+    <p>由系统为您生成与目标考试考点范围、难度分布完全匹配的模考</p>
+</div>
+<div class="exam_begin">
+	<div class="nextNotView">
+    	<input type="checkbox" id="nextNotView"/><label for="nextNotView" class="lbl ">加入收藏夹</label>
+    </div>
+    <div class="begin"><a href="###" onclick="loadUrl()">开始模考</a></div>
+</div>
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/lianxi.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+
+
+
+var QuestionID ,isExerciseID ;
+
+var Qtype,ExerciseID,QuestionID,Questionarray,QuestionNumber;
+QuestionNumber=0;
+
+var type = 3;
+
+// 加载数据
+$(function(){
+    if(common.isiOS){
+      window.location="IOS:statuesNotDisplay"  
+    }
+});
+
+$(".lbl").on("click",function(){
+    if($(this).hasClass('lblchecked')){
+        $(this).removeClass("lblchecked");
+    }else{
+        $(this).addClass("lblchecked");
+    }
+
+});
+
+
+function loadUrl(){
+    var jumpurl=getParamUrl("url");
+    if ($(".lbl").hasClass('lblchecked')) {
+        var url = common.interfaceBase + "AddCollection/"+getParamUrl("id")+"?collectType=6";
+        var method = "post";
+        var result = WAjax(url,method);
+    };
+    window.location.href=jumpurl;
+}
+
+
+
+</script>
+</body>
+</html>

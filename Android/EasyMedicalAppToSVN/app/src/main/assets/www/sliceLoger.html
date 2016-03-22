@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>切片引导页</title>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+	<style type="text/css">
+		body,html{margin:0px;height:100%;}
+		.autoHeight{position:absolute;width:100%;height:100%;background: url(img/step1.jpg) no-repeat;background-size: 100%,100%;}
+		.autoBtn{position:relative;top:70%;margin:0 auto;width:45%;height:6%;background: url(img/gogogo.png) no-repeat;background-size: 100%,100%;}
+	</style>
+</head>
+<body id="loger" >
+	<div class="autoHeight"></div>
+	<div class="autoBtn" style="display: none;"></div>
+	<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+	<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+	<script>
+	$(function() {
+		if(common.isiOS){
+			window.location="IOS:fullScreen";
+		}
+		var step = 1;
+		var url =  window.location.search.split("?url=")[1];
+		$('#loger').swipeLeft(function(){
+			step += 1;
+			if(step <= 4){
+				$(".autoHeight").css({"background":"url(img/step"+step+".jpg) no-repeat","background-size":"100%,100%"});
+				if(step ==4){
+					$(".autoBtn").show();
+				}
+			}
+		})
+		$(".autoBtn").on("tap",function(){
+			window.location.href = encodeURI(url);
+		})
+	})
+	</script>
+</body>
+</html>

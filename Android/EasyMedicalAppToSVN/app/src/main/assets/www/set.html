@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>设置</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/mine.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top_jifen">
+     <div class="back" style="top:1%;left:0;width:10%;height:100%;background-image: url(img/back.png);background-size: 41% 61%;background-repeat: no-repeat;background-position:center;"></div>
+    <h1>设置</h1>
+</div>
+<!--顶部结束-->
+
+<!--设置开始-->
+<div class="setting_box">
+    <ul>
+        <li class="clearfix set-touxiang">
+            <a href="###">头像</a>
+            <span id="icon" style="display:none"><img v-bind:src="icon" id="touxiang"/></span>
+
+            <!-- <input type="file" style="position:absolute;top:0px;left:0px;opacity:0;width:100%;height:108px;" accept="image/*"> -->
+        </li>
+    </ul>
+</div>
+<!--设置结束-->
+
+<!--退出当前账号  开始-->
+<div class="outer_infos">
+    <a href="###" onclick="exit()">退出当前账号</a>
+</div>
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script type="text/javascript" src="js/cordova-2.2.0.js"></script>
+<script type="text/javascript">
+$(function(){
+    $(".btns").click(function(){
+        $("#bgwin,.change_touxiang").hide();
+    });
+    
+    $(".setting_box").css({'margin-top':$(".top_jifen").height()});
+    var url = "http://115.29.97.231:3000/api/Mobile/GetMyInfo";
+    var result = WAjax(url,'get');
+    var icon = new Vue({
+        el: '#icon',
+        data: {
+            icon:result.Icon
+        }
+    })
+    $('#icon').show();
+
+
+    //android调用
+    if(common.isAndroid){
+        $(".set-touxiang").click(function(){
+            window.local_obj.getPhoto();
+        });    
+    }else{
+        $(".set-touxiang").click(function(){
+            getImage();
+        });
+    }
+
+       /*返回*/
+    $(".back").on("tap",function(){
+        //window.location.href = "course.html";
+        common.goToHistoryPage();
+    });
+    
+});
+
+    function getImage(){
+        if(common.isiOS){
+            //ios传值
+            window.location="IOS:UPLOADPHOTO";
+        }
+    }
+    function uploadPhoto(key,value){
+        if (key == "true") {
+             location.reload() ;
+        };
+    }
+
+    function exit(){
+        if(common.isiOS){
+            window.location="IOS:EXIT";
+        }else{
+            window.location.href="login.html";
+        }
+    }
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>消息</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/message.css"/>
+</head>
+
+<body>
+
+<div class="top">
+    <div class="back"><a href="javascript:history.go(-1);" onclick="back()"><img src="img/back.png" /></a></div>
+    <div class="back"><a href="###" onclick="back()"><img src="img/back.png" /></a></div>
+    <h1>消息</h1>
+</div>
+
+<div class="message_box">
+    <ul class="tab_ul clearfix">
+        <li class="selected" data-id="replyMe">回复我的</li>
+        <li data-id="myReply">@我的</li>
+    </ul>
+    <div class="tab_content">
+        <div id="replyMe" style="">
+
+            <ul class="tab_content_list" id="replyMe-ul">
+                <template v-for="item in items">
+                    <li>
+                        <div class="clearfix">
+                            <div class="touxiang"><img src="{{ item.userIcon }}"/></div>
+                            <div class="nameBox">
+                                <h2>{{ item.userName }}1121</h2>
+                                <p>{{ item.creatTime }}</p>
+                            </div>
+                            <div class="huifu">
+                                <span><img src="img/huifu.png"/></span>回复
+                            </div>
+                        </div>
+                        <div class="huifuContent"><span>回复小明：</span>{{ item.commentContent}}</div>
+                        <div class="Contents">
+                            <p><span>小明：</span>{{ item.parentContent }}</p>
+<!--                             <p class="title clearfix"><span class="imgs"><img src="http://115.29.97.231:8000/{{item.image}}"/></span>{{ item.Name }}</p> -->
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </div>
+        <div id="myReply" class="none">
+            <ul class="tab_content_list" id="myReply-ul">
+                <template v-for="item in items">
+                    <li>
+                        <div class="clearfix">
+                            <div class="touxiang"><img src="http://115.29.97.231:8000/{{ item.userIcon }}"/></div>
+                            <div class="nameBox">
+                                <h2>{{ item.userName }}</h2>
+                                <p>{{ item.creatTime }}</p>
+                            </div>
+                            <div class="huifu">
+                                <span><img src="img/huifu.png"/></span>回复
+                            </div>
+                        </div>
+                        <div class="huifuContent"><span>@小明：</span>{{ item.commentContent}}</div>
+                        <div class="Contents">
+                            <p><span>小明：</span>{{ item.parentContent }}</p>
+                            <p class="title clearfix"><span class="imgs"><img src="{{ item.image}}"/></span>这是什么细胞？这是什么细胞？这是什么细胞？这是什么细胞？</p>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="backtotop" style="width:22px;position:fixed;bottom:10px;right:15px;display:none"><img src="img/backtotop.png"/></div>
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+
+window.onload = function(){
+            $(".tab_ul li").click(function(){
+                 $(this).addClass("selected").siblings().removeClass("selected");
+                    var dataID = $(this).data('id');
+                 $("#" + dataID).removeClass("none").siblings().addClass("none");
+            });
+            var url = "http://115.29.97.231:3000/api/Mobile/ReplyMe";
+            var method = "get";
+            var result = WAjax(url,method);
+            var maxpage;
+            if(result.length % 4 == 0){
+                maxpage = result.length / 4;
+            }else{
+                maxpage = result.length / 4 + 1;
+            }
+            // console.log(result);
+            // return false;
+            result = result.slice(0,4);
+            var page = 1;
+            for (var i = result.length - 1; i >= 0; i--) {
+            };
+            for (var i= 0;i<result.length;i++) {
+                if(result[i].commentType == 2){
+                   var durl = common.interfaceBase + "GetSliceFromId/"+result[i].DataID;
+                   var data = WAjax(durl,method);
+                   result[i].image = data[0].ThumbnailUrl;
+                   result[i].name = data[0].Name;
+                }
+                if(result[i].commentType == 3){
+                    var durl = common.interfaceBase + "getCourseware/"+result[i].DataID;
+                    var data = WAjax(durl,method);
+                    result[i].image = data[0].ThumbnailUrl;
+                    result[i].name = data[0].Name;
+                }
+                // return false;
+            };
+            // console.log(result);return false;
+           var replyme = new Vue({
+                el: '#replyMe-ul',
+                data: {
+                    items:result
+                }
+           })
+//-===============================================-
+            var url2 = common.interfaceBase + "MentionMe";
+            var result2 = WAjax(url2,method);
+            var maxpage2;
+            if(result2.length % 4 == 0){
+                maxpage2 = result2.length / 4;
+            }else{
+                maxpage2 = result2.length / 4 + 1;
+            }
+            result2 = result2.slice(0,4);
+            var page2 = 1;
+            for (var i = result2.length - 1; i >= 0; i--) {
+            };
+            $('#loading2').hide();
+            var myReply = new Vue({
+                el: '#myReply-ul',
+                data: {
+                    items:result2
+                }
+           })
+            $(document).scroll(function(event) {
+                var scrollTop = $(document).scrollTop();
+                var dHeight = $(document).height();
+                var wHeight = $(window).height();
+                if(scrollTop == 0){
+                 $('#backtotop').hide();
+                }else{
+                  $('#backtotop').show();
+                }
+                if(scrollTop >= dHeight-wHeight){
+                    var current = $(".tab_ul li[class=selected]").data('id');
+                    $('#loadmore').show();
+                    if(current == 'replyMe'){
+                        $('#loadmore').hide();
+                        if(page >= maxpage){
+                            return false;
+                        }
+                        result = WAjax(url,method);
+                        result = result.slice(4*page,4*page+4);
+                        page++;
+                        replyme.items = replyme.items.concat(result);
+                    }else{
+                        $('#loadmore').hide();
+                        if(page2 >= maxpage2){
+                            return false
+                        }
+                        result2 = WAjax(url2,method);
+                        result2 = result2.slice(4*page2,4*page2+4);
+                        page2++;
+                        myReply.items = myReply.items.concat(result2);
+                    }
+
+            }
+
+        });
+        $('#backtotop').on('click',function(e){
+            $(document).scrollTop(0);
+        });
+        }
+
+
+         function back(){
+            // iosParameter
+            if (iosback == "BACK") {
+                window.location = "IOS:BACK"
+                return;
+            };
+            window.location.href=localStorage.getItem("saveUrl");
+            localStorage["saveUrl"]="";
+        }
+
+        var iosback;
+        function iosParameter(BACK){
+            iosback = BACK;
+        }
+
+
+
+
+</script>
+</body>
+</html>

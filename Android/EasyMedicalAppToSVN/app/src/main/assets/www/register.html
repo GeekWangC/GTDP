@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- 登录页面 -->
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>注册</title>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/common.css"/>
+	<link rel="stylesheet" type="text/css" href="css/login.css"/>
+</head>
+<body>
+	<div class="login_register">
+		<ul class="clearfix">
+	        <li><a href="###" class="selected">注册</a></li>
+	        <li><a href="login.html">登录</a></li>
+	    </ul>
+	    <div class="back"><a href="login.html"><img src="img/register-left.png" /></a></div>
+	</div>
+	<div class="form_box">
+		<form id="loginForm" action="" method="post">
+			<div class="bor_b"><label for="user_ID">学号</label><input type="text" name="userName" value="" id="user_ID"/></div>
+			<div class="bor_b"><label for="user_Pwd">密码</label><input type="password" name="password" value="" id="user_Pwd"/></div>
+			<div class="bor_b phone_box clearfix"><label for="user_Phone">手机号</label><input name="mobile" type="tel" value="" id="user_Phone"/><label class="yanzhengma" id="lbl_yzm">获取验证码</label></div>
+			<div class="bor_b1"><a id="login_in" class="loginR">注  册</a></div>
+			<div class="bor_b1 a_right"><a href="###">忘记密码</a></div>
+	    </form>
+	</div>
+	<input type="button" value="测试接口使用" id="test" />
+	<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+	<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="js/login.js" type="text/javascript" charset="utf-8" ></script>
+	<script>
+		$(".back").on("tap",function(){
+			window.location.href = "login.html";
+		})
+		//注册提交
+		$("#login_in").on('tap', function () {
+			var userInfo  = $('form').serialize();
+		    var url = common.interfaceBase + "Register?"+userInfo;
+		    var method = "post";
+		    var result = WAjax(url,method);
+		    if(result){
+		    	window.location.href = "login.html";
+		    }else{
+		    	console.log("已注册");
+		    }
+		});
+
+		/*ceshi*/
+		$("#test").on("click",function(){
+			var base = "http://115.29.97.231:3000/api/Mobile/";
+			//var url = base+"GetCatalogue?type=Pathology";
+			//var url = base+"GetMyInfo";//个人信息
+			//var url = base + "GetAllTeachers";//我的老师  缺职位字段
+			//var url = base+ "GetSection?CourseID=4";
+
+			/*练习*/
+			//var url = base+"getAllCourses";//获取所有科目
+			//var url = base+"GetSection?CourseID=4";//获取科目的章
+			//var url = base+"CreateExercise?sections=1c38f8c1-8c4b-4d80-b48b-e62c09d05066,d5d1df90-65f8-48fa-a49f-b1d77c7daf95&type=1&courseId=4&isNew=ture";//进入题库创建联系
+			//var url = base+"CreateExercise?sections=&type=2&courseId=4&isNew=ture";//进入错题本
+			//var url = base+"CreateExercise?sections=&type=3&courseId=4&isNew=ture";//进入模拟考试
+			//var url = base+"GetExercise?ExerciseID=2019";//获取练习题
+			//var url = base+"GetSingleQuestion?ExerciseID=2055&QuestionID=1";//获取练习题中的单个试题
+			//var url = base+"GetSingleQuestion?ExerciseID=3967&QuestionID=650";//获取练习题中的单个试题
+			//var url = base+"SubmitQuestion?questionId=3156&exerciseId=2019";
+			//var url = base+"GetQuestionDetails?questionId=3156";//获取试题详解
+			//var url = base+"GetQuestionDetails?questionId=3156";//获取试题详解
+
+			//var url = base+ "GetMyCollection";//我的收藏列表
+			/*课程模块*/
+			//var url = base+ "SearchCourse?type=1&str= ";//搜索课程 
+			//var url = base + "getCourseware/7";
+
+			/*评论*/
+			//var url = base+"GetCommentFromId/1?commentType=1";//获取评论
+			//var url = base + "SendComment?commentContent=你真傻&parentID=''&dataID=1&commentType=1&mentionMe=''&picLable={picLable}";//发送评论
+
+			/*联系人*/
+			//var url = base + "GetStuOfGrade";//联系人列表
+
+			//var url = base + "GetQuesRightWrong?listId=3112";
+			//var url = base + "GetQuesStatistics?listId=3112";
+
+
+
+			//var url = base + "QuestionParsing?ExerciseID=3425&type=2"
+			//var url = base + "GetHistoryRecord";//获取历史记录
+			//var url = base + "ChangeFace";//修改头像
+			//var url = base + "AddCollection/3?collectType=4";//加入收藏
+			//var url = base + "postNote";//保存图书笔记
+			//var url = "http://115.29.97.231:3000/api/Mobile/AddCollection/659?collectType=4";
+			//var url = base + "getQuiz?QuizID=14";//保存图书笔记
+			var startDate = new Date();
+			console.log("请求接口开始时间："+ startDate)
+			var url = base +"Search?name=上皮"
+		    var method = "get";
+		    //var method = "post";
+		    var data = {};
+		    var result = WAjax(url,method,data);
+		    var endDate = new Date();
+		    console.log("接口返回数据时间："+ endDate)
+		    var date3=endDate.getTime()-startDate.getTime()  //时间差的毫秒数
+		    console.log("接口耗时："+ date3)
+		})
+	</script>
+</body>
+</html>

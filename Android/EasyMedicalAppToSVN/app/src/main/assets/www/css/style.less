@@ -1,0 +1,51 @@
+@topheight:78px;
+@msgimg:40px;
+@nums:6px;
+@topsearch:24px;
+@btns_search:16px;
+@examimg:20px;
+@examtime:28px;
+@top_examimg:35px;
+
+
+
+.fontheight(@fontsize,lineheight){ font-size:@fontsize; line-height:@lineheight;}
+.widthheight(@w,@h){ width:@w; height:@h;}
+.position(@left,@right,@top,@bottom){ left:@left; top:@top; right:@right; bottom:@bottom;}
+.border-bottom(@nums,@color){ border-bottom:@nums solid @color; border-left:@nums solid transparent; border-right:@nums solid transparent;}
+.border-top(@nums,@color){ border-top:@nums solid @color; border-left:@nums solid transparent; border-right:@nums solid transparent;}
+
+
+
+.top{ height:@topheight}
+	.top .message{ .position(0,24px,0,0); width:@msgimg; height:@msgimg; margin-top:-@msgimg/2;}
+	.top h1{ .fontheight(29px,78px);}
+	.top .search{ height:@topsearch; border-radius:@topsearch/2; -webkit-border-radius:@topsearch/2;}
+	.top .search input[type=text]{ height:@topsearch; line-height:@topsearch; font-size:@topsearchfont;}
+	.top .search .btns_search{ width:@btns_search; height:@btns_search;}
+	.banner{ margin-top:@topheight;}
+	.img_library li .img_box{ .widthheight(48px,54px);}
+	.img_library li h4{ .fontheight(10px,14px);}
+
+	.top .top_btns{ .position(0,0,9px,0);.widthheight(43px,22px);}
+	.top .top_btns a{ .fontheight(14px,22px)}
+	.top .more a{ letter-spacing:-5px; (15px,33px)}
+	.top .cancle{ .fontheight(16px,40px);}
+	.top .back{ .widthheight(20px,30px); margin-top:-15px;}
+	.img_word,.exam_save,.exam_count{ top:2px;.fontheight(10px,16px);}
+	.img_word span,.exam_save span,.exam_count span{ height:@exam;}
+	.img_word span img,.exam_save span img,.exam_count span img{ width:@exam; height:@exam;}
+	.top .exam_time{ top:6px; margin-left:-@examtime/2; width:@examtime; height:@examtime;}
+	/*top切换*/
+	.top_exam{ padding:2px 0;}
+	.top_exam img.view,.top_exam img.count,.top_exam img.save{ width:@top_examimg; height:@top_examimg;}
+
+
+	.course_box,.taolun_box{ margin-top:@topheight;}
+	.tab_ul .fleft{ .fontheight(24px,74px);}
+.tab_ul #kcall a.select_span:after,.tab_ul #saveall a.select_span:after{ .position(0,-15px,5px,0) .border-top(@nums,#9d9d9d);}
+.tab_ul #notread a.select_span:before{ .position(0,-15px,2px,0) .border-bottom(@nums,#9d9d9d);}
+.tab_ul #notread a.select_span:after{ .position(0,-15px,9px,0) .border-top(@nums,#9d9d9d);}
+.tab_ul #notread.selectbefore a.select_span:before{ .border-bottom(@nums,#ffb33b);}
+.tab_ul #notread.selectafter a.select_span:after{ .border-top(@nums,#ffb33b);}
+.tab_ul #kcall.selected a.select_span:after,.tab_ul #saveall.selected a.select_span:after{ .border-top(@nums,#ffb33b);}

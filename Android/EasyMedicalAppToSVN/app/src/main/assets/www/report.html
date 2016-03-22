@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>练习报告</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+<style>
+body{ background:#fff;}
+</style>
+</head>
+
+<body id="example-1">
+<!--顶部开始-->
+<div class="top" id="topShaow">
+	<div class="back"><a href="###" onclick="back()"><img src="img/back.png" /></a></div>
+    <h1>练习报告</h1>
+</div>
+<!--顶部结束-->
+<div class="course_box">
+<!--得分开始-->
+<div class="exam_gride clearfix">
+	<span class="total">总分：{{ items.TotalScore }}</span>
+    <h1>{{ items.ActualScore }}</h1>
+    <span class="fen">分</span>
+</div>
+<!--得分结束-->
+
+<!--考试情况开始-->
+<div class="exam_infomation">
+	<h2>考试情况</h2>
+    <h3>共{{ items.QuestionNum }}道，答对<span>{{ items.RightNum }}</span>道，答错{{ items.FaultNum }}道，未答{{ items.NotAnswer }}道。</h3>
+</div>
+<!--考试情况结束-->
+
+<!--练习历史列表开始-->
+<div class="exam_infomation_list">
+	<h2>模考得分趋势</h2>
+	<ul>
+    	<li>
+        	<a href="###">100</a>
+        </li>
+        <li>
+        	<a href="###">75</a>
+        </li>
+        <li>
+        	<a href="###">50</a>
+        </li>
+        <li>
+        	<a href="###">25</a>
+        </li>
+        <li>
+        	<a href="###">0</a>
+        </li>
+    </ul>
+</div>
+<!--练习历史列表结束-->
+
+<!--解析开始-->
+<div class="resolve_fixed">
+	<ul>
+    	<li onclick="wrongdetail()"><a href="###" >错题解析</a></li>
+        <li onclick="alldetail()"><a href="###" >全部解析</a></li>
+    </ul>
+</div>
+<!--解析结束-->
+
+    <script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+    <script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/lianxi.js" type="text/javascript" charset="utf-8" ></script>
+
+<script>
+$(function(){
+	// $(".exam_gride").css({'margin-top':$(".top").outerHeight()});
+    if(common.isiOS){
+      window.location="IOS:displayStatuesListNotScroll";
+    }
+    getExerciseID();
+
+    
+});
+
+// 加载
+var example1 = new Vue({        
+                el: '#example-1',
+                data: {
+                    items:[]
+                }
+            }) 
+var ExerciseID;
+function getExerciseID(){
+
+    ExerciseID = getParamUrl("ExerciseID");
+    var url = common.interfaceBase + "CommitExercise?ExerciseID="+ExerciseID;
+    var method = "post";
+    var result = WAjax(url,method);
+
+    example1.items = result;
+}
+
+function wrongdetail(){
+    window.location.href="errorAnalyse.html?ExerciseID="+ExerciseID+"&type="+1;
+}
+
+function alldetail(){
+    window.location.href="errorAnalyse.html?ExerciseID="+ExerciseID+"&type="+2;
+
+}
+
+function back(){
+    var type=getParamUrl("type");
+    if (type == 1) {//练习历史
+        window.location.href="practicehistory.html?type=1";
+    }else if (type==3){//模考历史
+        window.location.href="practicehistory.html?type=3";
+    }else{
+       window.location.href="simulationtest.html"; 
+    }
+}
+
+
+</script>
+</body>
+</html>

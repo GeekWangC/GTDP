@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>错题本</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+    <div class="back"><a href="lianxi.html"><img src="img/back.png" /></a></div>
+    <div class="message"><a href="###" onclick="saveUrl()"></a></div>
+    <h1>错题本</h1>
+</div>
+<!--顶部结束-->
+
+<div id="bgwin"></div>
+<div class="course_box">
+    <input type="hidden" id="courseid"/>
+    <input type="hidden" id="type"/>
+    <div class="menu">
+        <div class="tab_ul clearfix">
+            <div class="fleft selected" id="kcall">
+                <a class="select_span">全部错题</a>
+            </div>
+            <div class="fleft" id="notread">
+                <a class="select_span">练习错题</a>
+            </div>
+            <div class="fleft" id="btnsearch">
+                <a>搜索</a>
+            </div>
+        </div>
+        <div class="large_fixed">
+            <ul class="none" id="kcall_list">
+                <li data-id="1" class="selected"><a href="javascript:void(0)">大体病理</a></li>
+                <li data-id="2"><a href="javascript:void(0)">病理学</a></li>
+                <li data-id="3"><a href="javascript:void(0)">组织学</a></li>
+                <li data-id="4"><a href="javascript:void(0)">寄生虫</a></li>
+            </ul>
+               <input name="" type="hidden" value="" id="inputselect-courseid" class="select-input1"/>
+            <ul class="none" id="notread_list">
+                <li data-id="1" class="selected"><a href="javascript:void(0)">未读</a></li>
+                <li data-id="2"><a href="javascript:void(0)">已读</a></li>
+            </ul>
+            <div class="search_fixed none" id="btnsearchBox">
+                <div id="kcSearch">
+                    <div class="search clearfix">
+                        <form id="formSearch" action="" method="post" class="clearfix">
+                            <input type="text" value="" id="input_search" placeholder="课程关键字"/>
+                            <a href="javascript:void(0)" id="btns_search" class="btns_search"></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tab_content" id="wrongtopic">
+        <ul id="wrong_list">
+
+            <li class="clearfix"  v-for="item in items">
+                <div class="li_img_box"><a href="课程信息.html" style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a></div>
+                <div class="li_content_box">
+                    <h1>{{item.Content}}</h1>
+                    <h3>答对{{item.RightNum}}次，答错{{item.WrongNum}}次</h3>
+                    <h3 class="color1">{{item.CourseName}}</h3>  
+                    <div class="btnsBoxs star" onclick="collect({{item.QuestionID}})"><span><img id = "{{item.QuestionID}}"/></span></div>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+
+<script>
+$(function(){
+    
+    $(".tab_ul .fleft").click(function(){
+        $(this).addClass("selected").siblings().removeClass("selected");
+        if($(this).attr('id') == 'kcall'){
+            $("#notread_list,#btnsearchBox").hide();
+            $("#notread").removeClass("selectafter selectbefore");
+            if($("#kcall_list").is(":hidden")){
+
+                $("#kcall_list,#bgwin").show();
+                $("#bgwin").css({'opacity':'0.5'});
+            }else {
+                $("#kcall_list,#bgwin").hide();
+            }
+            var codetxt = $(this).find('.select_span');
+            $("#kcall_list li").click(function(){
+                $(this).addClass("selected").siblings().removeClass("selected");
+                codetxt.text($(this).text());
+                $("#kcall_list,#bgwin").hide();
+                $("#courseid").val($(this).attr("data-id"));
+             /*   if($(this).text() == "大体病理"){
+                    courseId = 1;
+                }else if($(this).text() == "病理学"){
+                    courseId = 2;
+                }else if($(this).text() == "组织学"){
+                    courseId = 3;
+                }else{
+                    courseId = 4;
+                }*/
+                getlist();//获取不同分类下的错题列表
+            });
+        } else if($(this).attr('id') == 'notread'){
+            $("#kcall_list,#btnsearchBox,#bgwin").hide();
+            var codetxt = $(this).find('.select_span');
+            if(codetxt.text() == "练习错题"){
+                $(this).addClass("selectbefore").removeClass("selectafter");
+                codetxt.text('模考错题');
+               
+                $("#type").val(4);
+                getlist();//获取练习试题的错题列表
+            } else {
+                $(this).addClass("selectafter").removeClass("selectbefore");
+                codetxt.text('练习错题');
+                $("#type").val(5);
+                getlist();//获取练习试题的错题列表
+            }
+        } else if($(this).attr('id') == 'btnsearch'){
+            $("#kcall_list,#notread_list,#bgwin").hide();
+            $("#notread").removeClass("selectafter selectbefore");
+            if($("#btnsearchBox").is(":hidden")){
+                $("#btnsearchBox,#bgwin").show();
+                $("#bgwin").css({'opacity':'0.5'});
+            }else {
+                $("#btnsearchBox,#bgwin").hide();
+            }
+            getlist();
+        } else {
+            $("#notread_list,#kcall_list,#btnsearchBox,#bgwin").hide();
+            $("#notread").removeClass("selectafter selectbefore");
+        }
+    });
+
+var isExerciseID = "";
+        var resultList = "";
+        var courseId = 0;//科目id  
+        //错题列表
+        var example1 = new Vue({
+            el: '#wrongtopic',
+            data: {
+                items: []
+            },
+        })
+        //刚进入界面默认加载所有错题
+        getlist(1,0,"");
+
+
+    //获取列表数据
+    function getlist(selecttype,courseId,keyword){
+        var courseId =$("#courseid").val()||"";
+        var type = $("#type").val()||2;
+        var keyword = $("#input_search").val()||"";
+        //获取练习题的ID
+        var getExerIdUrl = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type="+type;
+        if(courseId){
+            getExerIdUrl = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type="+type+"&courseId=" + courseId;
+        }
+        
+/*        if(selecttype == 1){//获取全部错题
+            if(courseId == 1){
+                var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=2&courseId=" + courseId;
+            }else if(courseId == 2){
+                var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=2&courseId=" + courseId;
+            }else if(courseId == 3){
+                var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=2&courseId=" + courseId;
+            }else if(courseId == 4){
+                var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=2&courseId=" + courseId;
+            }else{
+                var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=2";
+            }
+        }else if(selecttype == 2){//获取练习错题
+            var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=4";
+        }else if(selecttype == 3){//获取模拟错题
+            var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=5";
+        }else{//获取全部错题的最新的
+            var url = "http://115.29.97.231:3000/api/Mobile/CreateExercise?sections=&type=2&isNew=true";
+        }*/
+        var method = "post";
+        var result = WAjax(getExerIdUrl,method);
+
+        isExerciseID = result;
+
+        var url = "http://115.29.97.231:3000/api/Mobile/GetAllQuestions?ExerciseID="+isExerciseID;
+        if(keyword){
+            "http://115.29.97.231:3000/api/Mobile/GetAllQuestions?ExerciseID="+isExerciseID + "&keyword=" + keyword;
+        }
+       
+        var method = "get";
+        resultList = WAjax(url,method);
+        if(resultList != null){
+            example1.items = resultList;
+        }else{
+            example1.items = [];
+    }
+}
+    $("#btns_search").on("tap",function(){
+        getlist();
+    })
+function saveUrl(){
+    localStorage["saveUrl"] = window.location.href;
+    window.location.href="messages.html";
+}
+});
+
+function collect(id){
+            //alert(id);
+            //收藏和取消
+            if ($("#"+id+"").attr('src')=="img/star-gray1.png"){//收藏
+                document.getElementById(id).src="img/star1.png";
+         
+                var url = "http://115.29.97.231:3000/api/Mobile/AddCollection/"+ id +"?collectType="+1;
+                var method = "post";
+                var result = WAjax(url,method);
+
+            }else{//取消收藏
+                document.getElementById(id).src="img/star-gray1.png";
+
+                var url = "http://115.29.97.231:3000/api/Mobile/DeleteCollection/"+ id +"?collectType="+1;
+                var method = "post";
+                var result = WAjax(url,method);
+            }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>学习记录</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common.css"/>
+<link rel="stylesheet" type="text/css" href="css/mine.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top_jifen">
+	<div class="back"><a href="###"><img src="images/back.png" /></a></div>
+    <div class="message"><a href="messages.html"><img src="images/chat.png" /></a></div>
+    <h1>学习记录</h1>
+</div>
+<!--顶部结束-->
+
+<!--收藏开始-->
+<div class="collection_box">
+	<ul class="tab_ul clearfix" id="teacher_ul">
+    	<li class="selected">全部记录<span class="navLine"></span></li>
+        <li>最新</li>
+        <li id="searchLi">搜索
+        	<div id="kcSearch">
+                <div class="search clearfix">
+                    <form id="formSearch" action="" method="post" class="clearfix">
+                        <input type="text" value="" id="input_search" placeholder="关键字"/>
+                        <input type="button" id="btn-search"/>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+    
+    <div class="history_list">
+    	<ul>
+            <li class="clearfix">
+        	<div class="li_img_box"><img src="images/li-img.png"/></div>
+            <div class="li_content_box">
+            	<h1>阿米巴</h1>
+                <h3>讲师：李教授</h3>
+                <h3>课件数量：3  总积分：40</h3>
+                <h3 class="color1">寄生虫</h3>
+                <span>播放至3分15秒</span>
+            </div>
+        </li>
+        
+        </ul>
+    </div>
+</div>
+<!--收藏结束-->
+
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/vue.js" type="text/javascript"></script>
+<script>
+$(function(){	
+	$(".tab_ul li").click(function(){
+		$(this).addClass("selected").siblings().removeClass("selected");
+	});
+	
+	$(document).find(".li_img_box img").css({'height':$(this).find(".li_content_box").innerHeight()-3,'width':'auto'});
+	
+	$(".collection_box").css({'margin-top':$(".top_jifen").height()});
+});
+</script>
+</body>
+</html>

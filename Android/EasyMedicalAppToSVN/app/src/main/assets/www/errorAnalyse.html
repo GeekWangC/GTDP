@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>试题错误</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+<style>
+body{ background:#fff;}
+</style>
+</head>
+
+<body id="bodyId">
+<!--顶部开始-->
+<div class="top clearfix">
+	<div class="back" ><a href="javascript:void(0);"><img src="img/back.png" /></a></div>
+   
+    <a href="###" onclick="examList()" class="exam_save" id="exam_count"><span><img src="img/exam_count.png" /></span><div id="allcount"></div></a>
+    <a href="###" id="exam_save" class="exam_save"><span><img  src="" id="shoucang" /></span>收藏</a>
+    <a href="lianxi.html" class="exam_save" id="exam-index"><span><img src="img/index1.png" /></span>首页</a>
+    </div>
+</div>
+<div class="top_exam">
+    <img src="img/count12.png" class="count" onclick="examList()"/>
+    <img src="" id="shoucangBig"  class="save" onclick="collect()"/>
+</div>
+<!--顶部结束-->
+
+<!--练习试题开始-->
+<div class="course_box" >
+    <div id="example1-1">
+    <div class="exam_Q">
+    <h1><div>{{ answer.Title }}</div></h1>
+    <div class="exam_Q_img">
+        <img src="{{ answer.ThumbnailUrl }}" v-if="answer.ThumbnailUrl != null && answer.ThumbnailUrl !=http://115.29.97.231:3000/null" />
+    </div>
+    <ul id="exam_A_list" class="clearfix" >
+        <template v-for="itemson in answer.questTitle " id="itemsontitle">
+        <li v-if="itemson.answerRight==true" class="rihgtQ"><a href="###"><span>{{ itemson.firstTitle }}</span>{{ itemson.secondTitle }}</a></li>
+        <li v-if="itemson.answerRight==false" class="wrongQ"><a href="###"><span>{{ itemson.firstTitle }}</span>{{ itemson.secondTitle }}</a></li>
+        <li v-if="itemson.answerRight=='normal'"><a href="###"><span>{{ itemson.firstTitle }}</span>{{ itemson.secondTitle }}</a></li>
+        </template>
+    </ul>
+</div>
+</div>
+<!--练习试题结束-->
+
+<div class="Q_introduce" id="lookdetail">
+    <div class="Q_xiangjie">
+        <h1>试题详解</h1>
+        <p class="info" id="detailid"></p>
+    </div>
+    <div class="knowlarge">
+        <h1>相关知识点</h1>
+        <div class="btns"><a href="###">{{ detail.SliceName }}</a></div>
+    </div>
+    <div class="tongji">
+        <h1>数据统计</h1>
+        <p class="title">校友错误率</p>
+        <p class="nums">{{ detail.TotalErrorRate }}</p>
+        <p class="gride">我做对<span class="right_A">{{ detail.MyRightCount}}</span>次，做错<span class="wrong_A">{{ detail.MyErrorCount}}</span>次</p>
+    </div>
+</div>
+<div class="Q_introduce" id="commentid">
+    <div id="pinglun">
+      <a id="fenxi">校友分析<span class="numbers" id = "conmmentcountid"></span></a>
+        <ul class="tab_content_list">
+             <template v-for="Replies in commentdetail" track-by="$index">    
+            <li>
+             <div id='onlyconmment' v-if="Replies.childComment == 0">{{Replies.MentionMe}}
+                <div class="clearfix">
+                    <div class="touxiang"> <img src="{{ Replies.userIcon }}" v-if="Replies.userIcon != null"/>
+                    <img src="img/touxiang.png" v-else/>
+                    </div>
+                    <div class="nameBox">
+                        <h2>{{ Replies.userName }}</h2>
+                        <h2>&nbsp &nbsp &nbsp &nbsp{{ Replies.commentContent }}</h2>
+                        <p>{{ Replies.mytime }}</p>
+                        <div class="huifu"  onclick="reply({{ Replies.commentID }})">
+                            <span><img src="img/huifu.png"/></span>回复
+                        </div>
+                    </div>
+                </div>
+              </div>
+<!--  -->
+             <div id='replycomment' v-else>{{Replies.MentionMe}}
+                <div class="clearfix">
+
+                <div class="touxiang">
+                    <img src="{{ Replies.childComment.userIcon }}" v-if="Replies.childComment.userIcon != null"/>
+                       <img src="img/touxiang.png" v-else/>
+                </div>
+                <div class="nameBox">
+                    <h2>{{ Replies.childComment.userName }}</h2>
+                    <p>{{ Replies.childComment.mytime }}</p>
+                    <!-- <span class="times">{{ Replies.mytime }}</span> -->
+                    <div class="reply"  onclick="reply({{ Replies.commentID }})"><span><img src="img/huifu.png"/></span>回复</div>
+                </div>
+            </div>
+
+                            <div class="huifuContent"><span>回复 {{ Replies.userName }}：</span>
+                              {{ Replies.childComment.commentContent }}</div>
+                <div class="Contents" >
+                    <p><span >{{ Replies.userName }}：</span>{{ Replies.commentContent }}</p>
+                    <p class="title clearfix"><!--<span class="imgs" ><img class="imgclass"/>
+                    </span>--></p>
+                </div>
+             </div>   
+            </li>
+            </template>
+            </li>
+        </ul>
+        <div class="pinglun_fixed" onclick='submitconmment()'>
+            <a href="###" id="btn_pinglun">评论</a>
+        </div>
+    </div>
+</div>
+<div id="bgwin1"></div>
+      <!--准备交卷-->
+<div class="exam_finish">
+  <div class="down"><img src="img/down.png"/></div>
+  <div class="exam_number">
+      <ul id="test1" class="clearfix">
+          
+      </ul>
+  </div>
+</div>
+
+    <script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+    <script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/lianxi.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+var ExerciseID,type,collectTest;
+
+var Qtype,ExerciseID,QuestionSingle,QuestionNumber,QuestionID,isfist,Questionarray;
+
+$(function(){
+	
+	$("#go_on,.down").click(function(){
+		$("#bgwin1,.exam_finish").hide();
+         if (t > 0) {
+    if(common.isiOS){
+       window.location="IOS:displayStatuesList";
+     }
+
+   }else{
+    if(common.isiOS){
+      window.location="IOS:displayStatuesListNotScroll";
+    }
+   }
+
+	});
+
+	// $(".exam_Q").css({'margin-top':$(".top").outerHeight() + 10});
+	
+	$("#exam_save").click(function(){
+		// $(this).find("img").attr('src','img/exam-save1.png');
+		$(this).find("a").addClass("selected");
+		$(this).find("img").css({'animation':'MoveScale .5s ease both','-webkit-animation':'MoveScale .5s ease both'});
+        // 收藏
+        collect();
+
+	});
+
+     collectTest=getParamUrl("collectTest");
+
+     if (collectTest != undefined) {
+        if(collectTest == 1){
+        questSingleCollectTest(getParamUrl("questionID"));
+        return;
+        }
+     };
+    if (getParamUrl("QuestionNumber") != undefined) {
+        QuestionNumber=parseInt(getParamUrl("QuestionNumber"));
+    }else{
+       QuestionNumber=0; 
+    }
+    
+    isfist=true;
+    type = getParamUrl("type");
+    ExerciseID = getParamUrl("ExerciseID");
+
+    reportdetail();
+
+});
+// 收藏
+
+function collect(){
+    collectp(QuestionID,1);
+}
+
+function examList(){
+
+    $("#bgwin1").css({'display':'block'});
+    $(".exam_finish").show();
+
+     if( t > 0 ) {
+      if(common.isiOS){
+        window.location="IOS:notDisplayStatuesList";
+      }    
+  } else {
+     if(common.isiOS){
+      window.location="IOS:notDisplayStatuesListNotScroll";
+     } 
+  }
+}
+var t;
+window.onscroll = function(){
+    t = document.documentElement.scrollTop || document.body.scrollTop;
+    if( t > 0 ) {
+        $(".top").css({'display':'none'});
+        $(".top_exam").show();
+        if(common.isiOS){
+          window.location="IOS:notDisplayStatues";
+        }
+    } else {
+        $(".top_exam").css({'display':'none'});
+        $(".top").show();
+        if(common.isiOS){
+          window.location="IOS:displayStatues";
+        }
+    }
+}
+
+// 左滑动
+$("#bodyId").swipeLeft(function(){
+    if(collectTest != 1){
+        answerid = undefined;
+        $("#lookdetail").css({'display':'none'});
+        $("#commentid").css({'display':'none'});
+         // document.getElementById('submit_btns').style.display = "block";
+        if (QuestionNumber<Questionarray.length-1) {
+            QuestionNumber= QuestionNumber+1;
+        };
+
+        reportdetail();
+    }
+});
+
+// 右滑动
+$("#bodyId").swipeRight(function(){
+    if(collectTest != 1){
+        answerid = undefined;
+        $("#lookdetail").css({'display':'none'});
+        $("#commentid").css({'display':'none'});
+         // document.getElementById('submit_btns').style.display = "block";
+        if (QuestionNumber>0) {
+             QuestionNumber= QuestionNumber-1;
+        };
+        reportdetail();
+    }
+});
+
+
+
+var example1 = new Vue({        
+                el: '#example1-1',
+                data: {
+                    answer: ""
+                }
+            }) 
+
+
+
+// 试题解析
+function reportdetail(){
+
+    var url = common.interfaceBase + "QuestionParsing?ExerciseID="+ExerciseID+"&type="+type;
+    var method = "get";
+    var result = new Array()
+    result = WAjax(url,method);
+
+    Questionarray = result;
+
+    if (Questionarray == "" && type == 1) {
+        alert("暂无错题");
+
+        window.history.go(-1); 
+        return;
+    };
+
+    if (Questionarray.length==0 && type == 2) {
+        alert("暂无试题");
+
+        window.history.go(-1); 
+        return;
+    };
+
+    questSingleC(QuestionNumber);
+}
+
+function questSingleCollectTest(id){
+
+    var url = common.interfaceBase + "GetSingleQuestion?QuestionID="+id;
+
+    var method = "get";
+    var resultp = WAjax(url,method);
+
+
+    var aa=[];
+    var bb=resultp.Options;
+
+    for (var i = 0; i < bb.length; i++) {
+        var dd={};
+        dd.firstTitle=bb[i].Title;
+        dd.secondTitle=bb[i].Content;
+        dd.number=i;
+        if (resultp.Answer != bb[i].Title) {
+            dd.answerRight=bb[i].IsAnswer;
+        }else{
+            dd.answerRight=true;
+        }
+        aa.push(dd);
+    };
+    QuestionSingle=resultp
+
+    QuestionSingle.questTitle=aa;
+    QuestionSingle.Title=resultp.Content;
+    var src=QuestionSingle.Title.substring(QuestionSingle.Title.indexOf("src=\"")+5,QuestionSingle.Title.indexOf("\">"));
+    QuestionSingle.ThumbnailUrl=common.sliceImgBase + src;
+    example1.answer = QuestionSingle;
+    document.getElementById("allcount").innerHTML="1/1";
+
+    isCollect();
+    // 查看详情
+    lookdetail(id);
+    // 获取评论
+    getconmment();
+
+}
+// 获取单个试题
+function questSingleC(id){
+    $("#bgwin1,.exam_finish").hide();
+
+    if(common.isiOS){
+      window.location="IOS:displayStatuesListNotScroll";
+    }
+
+    QuestionNumber = id;
+    QuestionSingle = Questionarray[QuestionNumber];
+
+    var aa=[];
+    var bb=Questionarray[QuestionNumber].Content;
+
+    for (var i = 0; i < bb.length; i++) {
+        var cc=bb[i].split(" ");
+        var dd={};
+        dd.firstTitle=cc[0];
+        dd.secondTitle=cc[1];
+        dd.number=i;
+
+        if (cc[0] == QuestionSingle.MyAnswers) {
+            dd.answerRight = false;
+        }else if(common.isContain(cc[0],QuestionSingle.RightAnswers)){
+            dd.answerRight = true;
+        }else{
+            dd.answerRight = "normal";
+        }
+
+        aa.push(dd);
+
+    };
+
+
+    QuestionSingle.questTitle=aa;
+    QuestionID = QuestionSingle.Id;
+    QuestionSingle.ThumbnailUrl=common.sliceImgBase + QuestionSingle.ThumbnailUrl;
+    example1.answer = QuestionSingle;
+
+    document.getElementById("allcount").innerHTML= (QuestionNumber+1)+"/"+Questionarray.length;
+
+    isCollect();
+// 查看详情
+    lookdetail(QuestionID);
+// 获取评论
+    getconmment();
+}
+
+function isCollect(){
+     // 是否收藏
+    if (QuestionSingle.IsCollect) {//收藏过
+        document.getElementById("shoucang").src="img/exam-save2.png";
+        document.getElementById("shoucangBig").src="img/shoucang.png";
+        $("#exam_save").addClass("selected");
+    }else{//没有收藏过
+        document.getElementById("shoucang").src="img/exam-save.png";
+        document.getElementById("shoucangBig").src="img/save12.png";
+        $("#exam_save").removeClass("selected");
+
+    }
+// 试题列表只加载一次
+    if (isfist) {
+        for (var i = 0; i <Questionarray.length; i++) {
+            isfist = false;
+            $('#test1').append('<li id="'+i+'"  onclick="questSingleC('+i+')">'+(i+1)+'</li>');
+
+            $('#'+Questionarray[i].QuestionID).addClass("red"); //添加样式
+            
+        };
+    };
+}
+
+// 提交评论
+function submitconmment(){
+
+    commentType=4;
+
+    var dataID=QuestionID;
+
+     window.location.href="remessage.html?parentID="+""+"&dataID="+dataID+"&ExerciseID="+ExerciseID+"&QuestionNumber="+QuestionNumber+"&type="+type;
+}
+
+ var example7 = new Vue({        
+                el:'#commentid',
+                data:{
+                    commentdetail:[]
+
+                }
+            }) 
+// 获取评论
+function getconmment(){
+
+    var url = common.interfaceBase + "GetCommentFromId/"+QuestionID+"?commentType=1";
+    getMyConmment(example7,url);
+    
+}
+
+// 回复评论
+function reply(conmmentid){
+    var dataID=QuestionID;
+    window.location.href="remessage.html?parentID="+conmmentid+"&dataID="+dataID+"&ExerciseID="+ExerciseID+"&QuestionNumber="+QuestionNumber+"&type="+type;
+
+}
+
+// 返回
+function back(){
+    if (collectTest!=undefined) {
+        window.location.href = "collectTest.html";
+        return;
+    };
+    window.location.href = "report.html?ExerciseID="+ExerciseID;
+}
+
+$(".back").on("tap",back); 
+
+$("#backHome").on("tap",function(){
+    window.location.href="lianxi.html";
+});
+</script>
+</body>
+</html>

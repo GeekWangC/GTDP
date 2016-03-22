@@ -1,0 +1,85 @@
+/* CSS Document */
+.none{ display:none;}
+.bor-none{ border:none;}
+
+/*顶部*/
+.top{ width:100%; background:#4dd1b0; position:fixed; top:0; left:0; box-shadow:0 0 4px 2px rgba(9,40,57,0.11); z-index:99; height:3em;}
+.top .message{ position:absolute; right:3%; top:20%; width:1.9em;}
+.top .more{ position:absolute; right:3%; top:20%; width:7%;}
+.top .more a{ color:#fff; font-size:1.25em; letter-spacing:-10px; line-height:1;}
+.top .back{ position:absolute; left:3%; top:20%; width:4%;}
+.top h1{ color:#fff; font-size:2em; line-height:2em; text-align:center; letter-spacing:2px; font-weight:normal; margin-top:0.2em;}
+
+.top_test{ width:100%; background:#4dd1b0; position:fixed; top:0; left:0; box-shadow:0 0 4px 2px rgba(9,40,57,0.11); z-index:99;}
+.top_test .message{ position:absolute; right:26px; top:17px; width:46px; height:46px}
+.top_test .more{ position:absolute; right:3%; top:20%; width:7%;}
+.top_test .more a{ color:#fff; font-size:1.25em; letter-spacing:-10px; line-height:1;}
+.top_test .back{ position:absolute; left:3%; top:20%; width:4%;}
+.top_test h1{ color:#fff; font-size:34px; line-height:80px; text-align:center; letter-spacing:2px; font-weight:normal;}
+
+/*课件列表*/
+.course_box .search{ width:100%; margin:3% 0 0 5%;}
+.search input[type=text]{ width:75%; float:left; display:inline;}
+.course_box .search input[type=button]{ margin-right:5%; float:right; display:inline;}
+.menu{ width:100%; position:relative;}
+.course_box,.taolun_box{ width:100%; margin-top:3em;}
+.course_box .search_content_box{ display:block;}
+.taolun_box{ padding-bottom:2.5em;}
+.taolun_box .taolun_list{ border-top:1px solid #eee;}
+.taolun_list p.xinde{ width:90%; margin:5% auto 0 auto; color:#262626; font-size:1em; line-height:1.6; text-indent:1em;}
+.course_box .tab_ul{ width:100%; list-style:none;}
+.tab_ul .fleft{ float:left; display:inline-block; text-align:center; font-size:2em; line-height:2em; color:#959595; cursor:pointer; z-index:10;}
+.tab_ul .fleft span{ display:block; width:100%; text-align:center;}
+.tab_ul .fleft code{ position:relative; line-height:86px;}
+.tab_ul .fleft code:after{ width:0; height:0; content:''; position:absolute; right:-25px; top:12px; border-top:8px solid #959595; border-left:8px solid transparent; border-right:8px solid transparent;}
+.tab_ul #kcall{ width:190px; margin-left:21px;}
+.tab_ul #kcall span img,.tab_ul #notread span img{ width:12px; height:8px; position:relative; top:-5px; left:5px;}
+.tab_ul #lastNew{ width:172px;}
+.tab_ul #notread{ width:200px;}
+.tab_ul #btnsearch{ width:126px; text-align:right; padding-right:24px;}
+.tab_ul #btnsearch span{ text-align:right;}
+.tab_ul .selected{ border-bottom:2px solid #ffb33a; color:#313131;}
+.tab_ul .selected code:after{ width:0; height:0; content:''; position:absolute; right:-25px; top:12px; border-top:8px solid #333; border-left:8px solid transparent; border-right:8px solid transparent;}
+.large_fixed{ position:absolute; top:90px; background:#fff; left:0; display:block; z-index:99; width:100%; height:auto;}
+.large_fixed ul{ width:700px; margin:0 auto; background:#fff;}
+.large_fixed ul li{ width:100%; border-bottom:1px solid #bfbfbf; height:82px;}
+.large_fixed ul li a{ line-height:82px; color:#9e9e9e; font-size:28px; display:block; width:100%;}
+.search_fixed{ position:absolute; left:0; top:1px; height:84px; width:630px; background:#fff; z-index:99; display:none;}
+.tab_content{ width:100%; background:#fff; border-top:3px solid #eee;}
+.tab_content ul{ width:94%; list-style:none; margin:0 auto;}
+.tab_content li{ width:100%;}
+.tab_content li .li_img_box{ width:30%; float:left; display:inline;}
+.tab_content li .li_content_box{ width:66%; float:right; display:inline; position:relative;}
+.li_content_box h1{ color:#555; font-size:1.2em; line-height:1.6em; font-weight:normal;}
+.li_content_box h3{ color:#959595; font-size:1em; line-height:1.4em; font-weight:normal;}
+.li_content_box h3.color1{ color:#ffb33a; margin-top:8px;}
+.li_content_box span{ position:absolute; right:0; bottom:0; display:block; color:#bfbfbf; font-size:1em; line-height:1.4em; font-weight:normal;}
+.li_content_box span.star{ position:absolute; right:0; bottom:0; display:block; width:10%;}
+.li_content_box span.download{ position:absolute; right:15%; bottom:0; display:block; width:10%;}
+.tab_content li:first-child { margin:0 0 0 0;}
+.tab_content_list{ width:100%; line-height:none;}
+.tab_content_list li{ background:#fff; margin:4px 0; padding:8px 4%; position:relative;}
+.tab_content_list li .touxiang{ float:left; display:inline; width:18%;}
+.touxiang img{ border-radius:50%; -webkit-border-radius:50%;}
+.tab_content_list li .nameBox{ float:right; display:inline; width:78%; border-bottom:1px solid #eee; padding-bottom:5px; position:relative;}
+.nameBox h2{ color:#4f4f4f; font-size:1em; line-height:1.5; font-weight:normal;}
+.nameBox p{ color:#626262; font-size:1em; line-height:1.5; font-weight:normal; text-indent:2em;}
+.nameBox span{ color:#d2d2d2; font-size:1em; line-height:1.5; font-weight:normal; display:block; margin-top:10px;}
+.nameBox span.reply{ display:block; position:absolute; right:0; bottom:10px; font-size:1em; color:#4dd1b0; line-height:1.3;}
+.nameBox span.reply img{ width:35%; vertical-align:top;}
+
+/*课件详情*/
+.course_info_img{ width:100%; background:#eee; padding:0 0 8px 0; position:relative;}
+.course_info_img img{ width:80%; margin-left:10%;}
+.course_info_img .screen{ position:absolute; right:5px; bottom:10px; width:14%;}
+
+@media screen and (max-device-width: 320px)  {
+	body{ font-size:53%;}
+	.top{ height:3em;}
+	.course_box,.taolun_box{ width:100%; margin-top:3em;}
+}
+@media screen and (min-device-width: 321px)  {
+	body{ font-size:66%;}
+	.top{ height:3.8em;}
+	.course_box,.taolun_box{ width:100%; margin-top:3.8em;}
+}

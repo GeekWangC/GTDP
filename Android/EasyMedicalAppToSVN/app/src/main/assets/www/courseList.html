@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>课件列表</title>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+    <div class="back" style="top:1%;left:0;width:10%;height:100%;background-image: url(img/back.png);background-size: 41% 61%;background-repeat: no-repeat;background-position:center;"></div>
+    <div class="more"><a href="###">。。。</a></div>
+    <h1>课件列表</h1>
+</div>
+<!--顶部结束-->
+<div class="course_box" id="courselist">
+    <div class="tab_content" id="search_list">
+        <ul>
+            <template v-for="course in lists">
+            <li class="clearfix" data-href ="courseDetail.html?id={{course.id}}" v-on:tap="gotoDetail($event,course.detailurl)">
+                <div class="li_img_box"><a href="javascript:void(0);" style="background:{{course.ThumbnailUrl}} no-repeat center center; background-size:100% 100%;"></a></div>
+                <div class="li_content_box">
+                    <h1 v-text="course.Name"></h1>
+                    <p v-text="course.Description"></p>
+                    <template v-if="course.IsCollect">
+                        <div class="btnsBoxs star selected" v-on:tap="collection(false,course.id,5,$event)"><span></span></div>
+                    </template>
+                    <template v-else>
+                        <div class="btnsBoxs star" v-on:tap="collection(true,course.id,5,$event)"><span></span></div>
+                    </template>
+                </div>
+            </li>
+            </template>
+        </ul>
+    </div>
+</div>
+<!--功能键弹框开始-->
+<div id="bgwin"></div>
+<div class="fixed_list">
+	<ul>
+    	<li id="messageID"><a href="javascript:void(0);">消息</a></li>
+        <li id="courseID"><a href="javascript:void(0);">返回主页</a></li>
+    </ul>
+    <div class="cancleImg"><a href="###">取消</a></div>
+</div>
+<!--功能键弹框结束-->
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+
+<script>
+$(function(){
+	$(".course_box").css({'margin-top':$(".top").height() + 5});
+	
+	$(".more").on("tap",function(){
+		$("#bgwin").css({'display':'block'});
+		$(".fixed_list").show();
+        if(common.isiOS){
+          window.location="IOS:notDisplayStatuesListNotScroll";
+     } 
+	});
+	
+	$(document).on("tap",".cancleImg",function(){
+		$("#bgwin,.fixed_list").hide();
+        if(common.isiOS){
+          window.location="IOS:displayStatuesListNotScroll";
+     } 
+	});
+       /*返回*/
+    $(".back").on("tap",function(){
+        //window.location.href = "course.html";
+        common.goToHistoryPage();
+    });
+});
+
+    /*课件列表模块*/
+    var collectionType = 0;//收藏标识，判断是否点击过
+    var courseList = {};
+    courseList.module = new Vue({
+        el: '#courselist',
+        data: {
+            lists: [],
+            examSaveUrled:"img/exam-save2.png",
+            examSaveUrl:"img/exam-save1.png"
+        },
+         // 在 `methods` 对象中定义方法
+        methods: {
+            gotoDetail: function (event,url) {
+                //var url = event.target.parentElement.parentElement.getAttribute("data-href");
+                common.recordHistory(window.location.href);
+                window.location.href = encodeURI(url);
+                //alert(event.target.tagName)
+            },
+            collection:function(doType,id,collectType,event){
+                var dotype = doType ? "Add" : "Delete";
+                if(collectionType == 1){
+                    dotype = doType ? "Delete" : "Add";
+                }
+                var url = common.interfaceBase + dotype+"Collection/"+id+"?collectType="+collectType;
+                var method = "post";
+                var result = WAjax(url,method);
+                if(result){
+                    if(dotype=="Add"){
+                       event.target.setAttribute("style","background:url(img/exam-save2.png) no-repeat center center;background-size:100% 100%");
+                            $(event.target).css({'animation':'MoveScale .5s ease both','-webkit-animation':'MoveScale .5s ease both'}); 
+                    }else{
+                        event.target.setAttribute("style","background:url(img/exam-save1.png) no-repeat center center;background-size:100% 100%");
+                            $(event.target).css({'animation':'','-webkit-animation':''});   
+                    }
+                }
+                collectionType = collectionType == 0 ? 1 : 0;
+                event.stopPropagation();
+            }
+        }
+    });
+    //更新列表缩略图地址兼获取列表数据
+    courseList.getCourseListData = function(url,method){
+        var result = WAjax(url,method);
+        if(result){
+            if(result.length>0){
+                result.forEach(function(e){
+                    e.detailurl = "courseDetail.html?id="+e.id;
+                    if(e.ThumbnailUrl){
+                        e.ThumbnailUrl= "url('common.bannerBase + e.ThumbnailUrl+')";
+                    }else{
+                        e.ThumbnailUrl= "url(img/li-img.png)";
+                    }
+                })
+            }
+            this.module.lists = result;
+        }
+    };
+    /*ajax链接*/
+    var ajaxData = function(id){
+        var courseId = id;
+        var url = common.interfaceBase + "getCourse/"+courseId;
+        var method = "get";
+        courseList.getCourseListData(url,method);
+    }
+    ajaxData(getParamUrl("id"));
+    // ios 传的课程ID
+    function courseId(Id){
+        ajaxData(Id);
+        return Id;
+        //alert(Id);
+    }
+
+    $("#messageID").on('tap',function(){
+        localStorage["saveUrl"] = "courseList.html";
+        window.location.href='messages.html';
+    });
+
+    $("#courseID").on('tap',function(){
+        window.location.href='course.html';
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>模拟考试</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+<style>body{ background:#eee;}</style>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+	<div class="back"><a href="lianxi.html"><img src="img/back.png" /></a></div>
+    <div class="message" onclick="saveUrl()"></div>
+    <h1>模拟考试</h1>
+</div>
+<!--顶部结束-->
+
+<!--练习分类菜单列表开始-->
+<div class="course_box" id="simulationitem_type">
+    <div class="exercise_list" id="lianxi_type">
+	<ul>
+    	<li v-for="item in items"  v-on:click="gotoSlice($event,item.id)" data-href="modelTestSingle.html?id={{item.id}}&name={{item.name}}">
+        <a href="#">{{item.name}}</a>
+        </li>
+    </ul>
+    </div>
+</div>
+<!--练习分类菜单列表结束-->
+
+<!--练习历史开始-->
+<div class="exam_history" id="exam_history" v-on:click="gotoHistory($event)" data-href="practicehistory.html?type=3">
+	<h1><span></span>模考历史</h1>
+</div>
+<!--练习历史结束-->
+
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+$(function(){
+    $(".exercise_list").css({'margin-top':$(".top").height()});
+        var url = common.interfaceBase + "getAllCourses";
+        var method = "get";
+        var result = WAjax(url,method);
+        //练习历史
+        var  simulationitem = new Vue({
+            el: '#simulationitem_type',
+            data: {
+                items: result,
+                
+            },
+             // 在 `methods` 对象中定义方法
+             methods: {
+                gotoSlice: function (event,id) {
+                    var a =event.target;
+                    if( event.target.tagName != "LI"){
+                        a = event.target.parentElement;
+                    }
+                    var url = a.getAttribute("data-href");
+
+                    if (localStorage["model"] == "true") {
+                         window.location.href=encodeURI(url);
+                    }else{
+                        window.location.href="modeltest.html?id="+id+"&url="+url;
+                    }
+                    
+                }
+            }
+        });
+         var history = new Vue({
+            el: '#exam_history',
+           
+             // 在 `methods` 对象中定义方法
+             methods: {
+                
+                gotoHistory:function(event) {
+                    var oDom = event.target;
+                    if(event.target.tagName != "DIV"){
+                        oDom = $(event.target).parents("div");
+                    }
+                    var url = oDom.attr("data-href");
+                    window.location.href=encodeURI(url);
+                }
+            }
+        })
+    });
+
+function saveUrl(){
+    localStorage["saveUrl"] = window.location.href;
+    window.location.href="messages.html";
+
+}
+         
+</script>
+</body>
+</html>

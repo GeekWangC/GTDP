@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<!-- 练习首页 -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>练习</title>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+<style>body{ background:#eee;}</style>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top clearfix" id="top">
+  <!-- <div class="search">
+      <form id="formSearch" action="" method="post" class="clearfix">
+          <input type="text" value="" id="input_search" placeholder="切片、课程、老师..."/>
+            <input type="button" id="btn-search"/>
+        </form>
+    </div> -->
+    <h1>练习</h1>
+
+    <div class="message" onclick="saveUrl()"></div>
+</div>
+
+<!--练习分类菜单列表开始-->
+<div id="bgwin1"></div>
+<div  class="course_box">
+    <div class="exercise_list" id="lianxi_type">
+          <ul id="example-1">
+                <template v-for="item in items ">
+              <li  id="{{item.id}}" onclick="showList({{item.id}},event)">
+                  <a href="javascript:void(0);">{{ item.name }}</a>
+                </li>
+                 </template>    
+            </ul>
+    </div>
+</div>
+
+
+<div class="exam_list">
+    <ul class="clearfix" id="example-2">
+        <template v-for="itemson in itemsons ">
+            <li id="{{itemson.ID}}"  v-on:click="showSection(itemson.ID,itemson.ParentID)"><a href="###">{{ itemson.nameCount}}、{{ itemson.nameAll}}</a></li>
+        </template>
+    </ul>
+    
+    <div  class="select_save">
+        <input type="checkbox" id="selectAll"/><label for="selectAll" class="lbl ">全选</label>
+        <a href="###" id="shoucang" >收藏题库</a>
+    </div>
+    <div class="enter_examgrey" id="jumpquestion">进入题库</div>
+</div>  
+<!--练习分类菜单列表结束-->   
+
+<!--练习菜单开始-->
+<div class="exercise_menu">
+  <div class="outer_circle">
+      <div class="inner_circle">
+          <ul>
+              <li><a href="wrongtopic.html"  id="nth-child1"><span><img src="img/book.png"/></span>错题本</a></li>
+                <li><a href="###" onclick="mycollect()" id="nth-child2"><span><img src="img/collection.png"/></span>试题收藏</a></li>
+                <li><a href="simulationtest.html" id="nth-child3"><span><img src="img/exam.png"/></span>模拟考试</a></li>
+                <li><a href="statisticsMessage.html" id="nth-child4"><span><img src="img/infomation.png"/></span>统计信息</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--练习菜单结束-->
+<!--练习历史开始-->
+<div class="exam_history" id="exam_history" >
+    <h1><span></span>练习历史</h1>
+</div>
+<!--练习历史结束-->
+    
+
+
+    <script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+    <script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/lianxi.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+
+$(function(){
+    //选择章节
+    $(document).on("click",".exam_list li",function(e) {
+        // $(this).addClass("selected");
+        e.stopPropagation();
+    });  
+    //遮罩隐藏
+    $("#bgwin1").click(function(){
+        $(this).hide();
+        $(".exam_list").hide();
+        if(common.isiOS){
+            window.location="IOS:showTabBar";
+        }
+        document.getElementById("selectAll").checked=false;
+        $(".lbl").removeClass("lblchecked");
+        sectionsid=undefined;
+        $(".exercise_list li").removeClass("selected");
+    });
+
+    $(".exercise_list").css({'margin-top':$(".top").height() + 5});
+    //全选
+    $(document).on("click","#selectAll",function(e){
+        if($(this).is(":checked")){
+            $(document).find(".exam_list li").addClass("selected");
+        } else {
+            $(document).find(".exam_list li").removeClass("selected");
+        }
+        e.stopPropagation();
+    });
+});
+
+$("#exam_history").on('click',function(){
+    window.location.href="practicehistory.html?type=1";
+});
+
+// 加载数据
+var CourseID;
+
+$(function (){
+    var url = common.interfaceBase + "getAllCourses";
+    var method = "get";
+    var result = WAjax(url,method);
+    var example1 = new Vue({        
+        el: '#example-1',
+        data: {
+            items: result
+        }
+    })
+
+
+
+});
+
+function showList(id,event){
+    showAllCourses(id,$(this)); 
+    $("#bgwin1").css({'display':'block'});
+}
+
+
+
+function showAllCourses(id,event){
+    if(common.isiOS){
+        window.location="IOS:hideTabBar";
+    }
+    document.getElementById( "jumpquestion" ).className = "enter_examgrey"; 
+    $("#shoucang").removeClass("selected");
+    CourseID = getDate(id,example2,event);
+}
+
+
+
+var sectionsid;
+
+ var example2 = new Vue({
+      el: '#example-2',
+       data: {
+             itemsons: "",
+
+             },
+         methods:{
+            showSection:function(ID,ParentID){
+
+                var url = common.interfaceBase + "CreateExercise?sections="+ID+"&type="+1+"&courseId="+CourseID+"&isNew=ture";
+                var method = "post";
+                var result = WAjax(url,method);
+                
+
+                if (sectionsid != undefined) {
+
+                    if ($("#"+ID+"").hasClass("selected")) {//删除id
+                        $("#"+ID+"").removeClass("selected");
+                         if (result == -200) {
+                                return;
+                            };
+                         document.getElementById( "jumpquestion" ).className = "enter_exam";
+
+                        var sectionsidArray = sectionsid.split(",");
+                        for (var i = 0; i < sectionsidArray.length; i++) {
+                            
+                            if (sectionsidArray[i] == ID) {
+
+                                sectionsidArray.splice(i,1);//从start的位置开始向后删除delCount个元素
+                                if (sectionsidArray.length == 0) {
+                                    sectionsid=undefined;
+                                    document.getElementById( "jumpquestion" ).className = "enter_examgrey";
+                                    $(".lbl").removeClass("lblchecked");
+                                    $("#shoucang").removeClass("selected");
+                                };
+                            }
+
+                            if (sectionsidArray[i] != undefined) {
+                                if (i==0) {
+                                    sectionsid="";
+                                    sectionsid = sectionsidArray[i];
+                                }else{
+                                     sectionsid = sectionsid+","+sectionsidArray[i];
+                                }   
+                            };
+
+                            
+                        };
+
+                    }else{
+                        if (result == -200) {
+                            return;
+                        };
+                        $("#"+ID+"").addClass("selected");
+                        document.getElementById( "jumpquestion" ).className = "enter_exam";
+
+                        if (!isContains(sectionsid,ID)) {
+                            sectionsid = sectionsid+","+ID;
+                        };
+                    }
+                }else{
+                    if (result == -200) {
+                            return;
+                        }
+                    $("#"+ID+"").addClass("selected");
+                    document.getElementById( "jumpquestion" ).className = "enter_exam";
+                    sectionsid=ID;
+                }
+
+
+                if (sectionsid == undefined) {
+                    return;
+                };
+
+
+                // 判断是否全选
+                var sectionsidArray = sectionsid.split(",");
+                 if (sectionsidArray.length == document.getElementById('example-2').getElementsByTagName('li').length) {
+                            document.getElementById("selectAll").checked=true;
+                            $(".lbl").addClass("lblchecked");
+                        }else{
+                            document.getElementById("selectAll").checked=false;
+                            $(".lbl").addClass("lbl");
+                        }
+            }   
+        }
+    })  
+
+
+var type = 1;
+
+var QuestionID ,isExerciseID ;
+
+// 获取练习题
+var getexerciseId = function(getexerciseId,ID,type,CourseID){
+
+    var result = getexerciseIdp(getexerciseId,ID,type,CourseID,3);
+
+    QuestionID = result[1].Questions;
+    isExerciseID = result[0];
+     window.location.href="stcw.html?QuestionID="+QuestionID+"&ExerciseID="+isExerciseID+"&type=3";
+
+}
+
+
+var isshoucang;
+isshoucang=false;
+
+$("#shoucang").on('click',function(){
+
+    if (sectionsid == undefined || sectionsid == "") {
+        $("#shoucang").removeClass("selected");
+        return;
+    };
+    if (isshoucang) {
+
+        isshoucang=false;
+        $("#shoucang").removeClass("selected");
+    }else{
+        isshoucang=true;
+        $("#shoucang").addClass("selected");
+
+    }
+    
+ });
+ 
+// 题库练习
+$("#jumpquestion").on('click', function () {
+
+    if (sectionsid != undefined) {
+        
+         getexerciseId(isshoucang,sectionsid,type,CourseID);
+    }
+});
+
+$("#selectAll").on("click",function(){
+
+    if ($("#selectAll").is(':checked')) {
+        //全选
+        $(".lbl").addClass("lblchecked");
+        sectionsid = undefined;
+        $(".clearfix li").each(function(){
+
+            document.getElementById( "jumpquestion" ).className = "enter_exam";
+
+
+            if (sectionsid != undefined) {
+                    sectionsid = sectionsid+","+$(this).attr('id');
+                }else{
+                    sectionsid=$(this).attr('id');
+
+                }
+        })
+
+    }else{
+        document.getElementById( "jumpquestion" ).className = "enter_examgrey";
+        $("#shoucang").removeClass("selected");
+        $(".lbl").removeClass("lblchecked");
+        if (sectionsid != undefined) {
+            var sectionsidArray = sectionsid.split(",");
+            for (var i = 0; i < sectionsidArray.length; i++) {
+                var id = sectionsidArray[i];
+                $("#"+id+"").removeClass("selected");
+            };
+            sectionsid = undefined;
+        }
+    }
+
+});
+
+// 判断一个字符串是否包含一个子串
+function isContains(str, substr) {
+    return str.indexOf(substr) >= 0;
+}
+
+function mycollect(){
+    // var my="1";
+    // window.location.href="mycollect.html?lixicollect="+my;
+    window.location.href="collectTest.html?";
+}
+
+function saveUrl(){
+    localStorage["saveUrl"] = "lianxi.html";
+    window.location.href="messages.html";
+
+}
+
+$("#btn-search").on("click",function(){
+    window.location.href="searchRecord.html"
+});
+
+</script>
+</body>
+</html>

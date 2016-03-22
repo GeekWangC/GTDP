@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <string name="app_name">MDTP</string>
+        <string name="hello_world">Hello world!</string>
+        <string name="action_settings">Settings</string>
+        <string name="zzxqpk">组织学切片库</string>
+        <string name="blxqpk">病理学切片库</string>
+        <string name="dtblqpk">大体病理切片库</string>
+        <string name="jscqpk">寄生虫切片库</string>
+        <string name="wswqpk">微生物切片库</string>
+        <string name="szptqpk">数字胚胎切片库</string>
+        <string name="historical">历史记录</string>
+        <string name="recommended">推荐</string>
+        <string name="searchremind">切片，课程，老师...</string>
+        <string name="homepage_text">首页</string>
+        <string name="course_text">课程</string>
+        <string name="practice_text">练习</string>
+        <string name="my_text">我的</string>
+        <string name="success">下载完成</string>
+        <string name="error">下载失败</string>
+        <string name="sdcarderror">SD卡不存在</string>
+
+</resources>

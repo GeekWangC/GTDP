@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!-- 课程首页 -->
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>课程</title>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+	<style>
+	.tab_content li .li_content_box .download{display: none;}/*无下载功能*/
+	</style>
+</head>
+<body id="kcc_list">
+	<!--顶部开始-->
+	<div class="top">
+		<div class="message"><a href="###" onclick="saveUrl()"></a></div>
+	    <h1>课程</h1>
+	</div>
+	<!--顶部结束-->
+	<div id="bgwin"></div>
+	<div class="course_box">
+		<input type="hidden" id="inputselect-courseId"/>
+		<input type="hidden" id="inputselect-type"/>
+		<div class="menu">
+	    	<div class="tab_ul clearfix">
+	        	<div class="fleft selected" id="kcall">
+	            	<a class="select_span">全部课程</a>
+	            </div>
+	            <div class="fleft" id="notread">
+	            	<a class="select_span">未读</a>
+	            </div>
+	            <div class="fleft" id="btnsearch">
+	            	<a>搜索</a>
+	            </div>
+	        </div>
+	        <div class="large_fixed">
+	        	<ul class="none" id="kcall_list">
+	                <li data-id="1" class="selected"><a href="javascript:void(0)">大体病理</a></li>
+	                <li data-id="2"><a href="javascript:void(0)">病理学</a></li>
+	                <li data-id="3"><a href="javascript:void(0)">组织学</a></li>
+	                <li data-id="4"><a href="javascript:void(0)">寄生虫</a></li>
+	            </ul>
+	            <ul class="none" id="notread_list">
+	                <li data-id="1" class="selected"><a href="javascript:void(0)">未读</a></li>
+	                <li data-id="2"><a href="javascript:void(0)">最新</a></li>
+	            </ul>
+	            <div class="search_fixed none" id="btnsearchBox">
+	                <div id="kcSearch">
+	                    <div class="search clearfix">
+	                        <form id="formSearch" action="" method="post" class="clearfix">
+	                            <input type="text" value="" id="input_search" placeholder="课程关键字"/>
+	                            <a href="javascript:void(0)" id="btns_search" class="btns_search"></a>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+    	</div>
+	    <div class="tab_content" >
+	    	<ul id="kc_list" >
+	    	<template v-for="item in items">
+	            <li class="clearfix" data-id="{{item.Id}}" data-href="courseList.html?id={{item.Id}}" v-on:tap="gotoDetail($event)">
+	            <div class="li_img_box"><a href="###" style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a></div>
+	                <div class="li_content_box">
+	                    <h1 v-text="item.Name"></h1>
+	                    <h3>讲师：{{item.Teacher}}</h3>
+	                    <h3>课件数量：<em v-text="item.CourseWaresCount"></em> 总积分：<em v-text="item.TotalScore"></em></h3>
+	                    <h3 class="color1">{{item.CourseName}}</h3>
+	                    <div class="btnsBoxs download"><span></span></div>
+                    	
+	                    <template v-if="item.IsCollect">
+	                   		<div class="btnsBoxs star selected" v-on:tap="collection(false,item.Id,4,$event)" ><span></span></div>
+  		                </template>
+  		                <template v-else>
+  		                	<div class="btnsBoxs star" v-on:tap="collection(true,item.Id,4,$event)"><span></span></div>
+  		                </template>                    
+	                </div>
+	            </li>
+	        </template>	            
+	        </ul>
+	    </div>
+	</div>
+	<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+	<script type="text/javascript" src="js/zepto/divselect.js"></script>
+	<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+	<script>
+	$(function(){
+		//Vue.config.debug = true;
+		var collectionType = 0;//收藏标识，判断是否点击过
+		$(".tab_ul .fleft").on("tap",function(){//上方工具栏
+			$(this).addClass("selected").siblings().removeClass("selected");
+			if($(this).attr('id') == 'kcall'){//科目选项
+				$("#notread_list,#btnsearchBox").hide();
+				$("#notread").removeClass("selectafter selectbefore");
+				if($("#kcall_list").is(":hidden")){
+					$("#kcall_list,#bgwin").show();
+					$("#bgwin").css({'opacity':'0.5'});
+				}else {
+					$("#kcall_list,#bgwin").hide();
+				}
+				var codetxt = $(this).find('.select_span');
+				$("#kcall_list li").on("tap",function(){
+					var courseId = $(this).attr("data-id");
+					$("#inputselect-courseId").val(courseId);
+					course.getCourseData();//获取列表数据
+					$(this).addClass("selected").siblings().removeClass("selected");
+					codetxt.text($(this).text());
+					$("#kcall_list,#bgwin").hide();
+				});
+			} else if($(this).attr('id') == 'notread'){//未读最新
+				$("#kcall_list,#btnsearchBox,#bgwin").hide();
+				var codetxt = $(this).find('.select_span');
+				var type = 1;
+				if(codetxt.text() == "未读"){
+					$(this).addClass("selectbefore").removeClass("selectafter");
+					codetxt.text('最新');
+					type = 2;
+				} else {
+					$(this).addClass("selectafter").removeClass("selectbefore");
+					codetxt.text('未读');
+					type = 1;
+				}
+				$("#inputselect-type").val(type);
+				course.getCourseData();//获取列表数据
+			} else if($(this).attr('id') == 'btnsearch'){
+				$("#kcall_list,#notread_list,#bgwin").hide();
+				$("#notread").removeClass("selectafter selectbefore");
+				if($("#btnsearchBox").is(":hidden")){
+					$("#btnsearchBox,#bgwin").show();
+					$("#bgwin").css({'opacity':'0.5'});
+				}else {
+					$("#input_search").val("");
+					$("#btnsearchBox,#bgwin").hide();
+				}	
+			} else {
+				$("#notread_list,#kcall_list,#btnsearchBox,#bgwin").hide();
+				$("#notread").removeClass("selectafter selectbefore");
+			}
+		});
+		/*课程模块*/
+		//$(".selects p").divselect();//下拉列表
+		var course = {};
+		var getList = function(){//获取课程列表
+			var courseId = $("#inputselect-courseId").val()||"";
+			var type = $("#inputselect-type").val()||1;
+			var str = $("#input_search").val()||"";
+			var url = common.interfaceBase + "SearchCourse?type="+type+"&courseId="+courseId+"&str="+str;
+			var method = "get";
+			var result = WAjax(url,method);
+			result.forEach(function(e){
+				if(e.ThumbnailUrl){
+					e.ThumbnailUrl= common.sliceImgBase + e.ThumbnailUrl+"')";
+				}else{
+					e.ThumbnailUrl= "url(img/li-img.png)";
+				}
+			})
+			return result;
+		}
+		var result = getList();
+		course.courseList = new Vue({//课程列表
+			el: '#kcc_list',
+			data: {
+				items: result,
+				listStyle:{	
+					backgroundSize:"100% 100%",
+					backgroundRepeat:"no-repeat",
+					backgroundPosition:"center"
+				},
+				examSaveUrled:"img/exam-save2.png",
+				examSaveUrl:"img/exam-save1.png"
+			},
+			methods: {// 在 `methods` 对象中定义方法
+				gotoDetail: function (event) {
+					var url = $(event.target).parents("li").attr("data-href");
+					//common.recordHistory(window.location.href);
+					window.location.href=encodeURI(url);//测试完删除
+					common.goToSecondPage(1,url);
+				},
+				collection:function(doType,id,collectType,event){
+					var dotype = doType ? "Add" : "Delete";
+					if(collectionType == 1){
+						dotype = doType ? "Delete" : "Add";
+					}
+					var url = common.interfaceBase + dotype+"Collection/"+id+"?collectType="+collectType;
+					var method = "post";
+					var result = WAjax(url,method);
+					if(result){
+						if(dotype=="Add"){
+							event.target.setAttribute("style","background:url(img/exam-save2.png) no-repeat center center;background-size:100% 100%");
+							$(event.target).css({'animation':'MoveScale .5s ease both','-webkit-animation':'MoveScale .5s ease both'});		
+						}else{
+							event.target.setAttribute("style","background:url(img/exam-save1.png) no-repeat center center;background-size:100% 100%");
+							$(event.target).css({'animation':'','-webkit-animation':''});		
+						}
+					}
+					collectionType = collectionType == 0 ? 1 : 0;
+					event.stopPropagation();
+				}
+			}
+		});
+		course.getCourseData = function(url,method){//更新列表缩略图地址兼获取列表数据	
+			course.courseList.items = getList();
+		};
+		/*课程模块*/
+		$("#btns_search").on("tap",function(){//搜索
+			course.getCourseData();//获取列表数据
+		});
+
+	});
+	function saveUrl(){
+		localStorage["saveUrl"] = "course.html";
+		window.location.href="messages.html";
+	}
+	</script>
+</body>
+</html>

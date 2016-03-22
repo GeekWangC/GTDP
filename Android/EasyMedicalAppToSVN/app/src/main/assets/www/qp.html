@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- 某切片目录页面 -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>单层扁平上皮</title>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common2.css"/>
+    <link rel="stylesheet" type="text/css" href="js/leaflet-0.7.3/leaflet.css" />
+    <style>
+        #container{background: #fff}
+    </style>
+    <script type="text/javascript" src="js/leaflet-0.7.3/leaflet-src.js"></script>
+</head>
+
+<body>
+<div id="qp-view">
+    <top-component v-bind:top-title="topTitle"><!--顶部--></top-component>
+    <div class="cut_info_img full" id="slice" style="margin-top: 47px;">
+        <div class="slice" id="container">
+            <div id="tool" style="display: none;"> 
+                <a href="javascript:void(0);" id="arr_left" style="position: absolute;top: 7em;left:1em;height:2em;width:2em;background:red;" >左</a> 
+                <a href="javascript:void(0);" id="arr_right" style="position: absolute;top: 7em;right:1em;height:2em;width:2em;background:red;">右</a> 
+            </div>
+            <canvas id="canvas">
+                年轻人，换个浏览器吧！
+            </canvas>
+        </div>
+        <div class="screen" v-on:tap="toScreen()"><img src="img/screen.png" v-on:tap="toScreen()"/></div>
+        <div class="txt">2.00X</div>
+    </div>
+    <div class="tabs clearfix" id="qp-caption">
+        <a class="selected" data-id="zhujie">注解</a>
+        <a data-id="pinglun">评论</a>
+        <a data-id="biaozhu">标注</a>
+        <a data-id="lianxi" class="exercise" style="display: none;"><span></span>练习模式</a>
+    </div>
+    <div class="Info_list">
+        <div id="zhujie"><p class="xinde" v-html="sliceData.Description"></p></div>
+        <div id="pinglun" class="none">
+            <ul class="tab_content_list">
+                <template v-for="data in pinglunData"  track-by="$index"><!--  | filterBy noEmp  in 'parentID'| orderBy 'creatTime' -1  -->
+                    <!-- <li v-if="data.childrenPL">
+                        <div class="clearfix">
+                            <div class="touxiang"><img v-bind:src="data.childrenPL.userIcon"/></div>
+                            <div class="nameBox">
+                                <h2 v-text="data.childrenPL.userName"></h2>
+                                <p class="times" v-text="data.childrenPL.newcreatTime"></p>
+                            </div>
+                            <div class="huifu" v-on:tap="reply($event)" data-id="{{data.childrenPL.commentID}}">
+                                <span><img src="img/huifu.png"/></span>回复
+                            </div>
+                        </div>
+                        <div class="huifuContent"><span>回复{{data.userName}}：</span>{{data.childrenPL.commentContent}}</div>
+                        <div class="Contents">
+                            <p><span>{{data.userName}}：</span>{{data.commentContent}}</p>
+                        </div>
+                    </li> -->
+                    <li class="clearfix">
+                        <div class="touxiang"><img v-bind:src="data.userIcon"/></div>
+                        <div class="nameBox">
+                            <h2 v-text="data.userName"></h2>
+                            <p class="color" v-text="data.commentContent"></p>
+                            <span class="times" v-text="data.newcreatTime"></span>
+                            <div class="reply" v-on:tap="reply($event)" data-id="{{data.commentID}}"><span><img src="img/huifu.png"/></span>回复</div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+            <div class="more_pinglun"><a href="javascript:void(0)">更多评论</a></div>
+            <div class="pinglun_fixed">
+                <a href="###">评论</a>
+                <div class="yigeyi" style="position: fixed;bottom: 0;left: 1em;display:none;">工具栏<a href="javascript:void(0)" style="width:2em;" onclick="alert(1);">@@@@@@</a></div>
+            </div>
+        </div>
+        <div id="biaozhu" class="exercise_list none">
+            <ul v-for="data in biaozhuData">
+                <li><a href="###" v-text="data.name"></a></li>
+            </ul>
+        </div>
+    </div>
+    <function-component><!--功能键弹框--></function-component>
+</div>
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/hammer/hammer.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="Component/functionComponent.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/qp.js" type="text/javascript" charset="utf-8" ></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- 某切片目录页面 -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <title>单层扁平上皮</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+<body>   
+<div id="cut">
+    <top-component v-bind:top-title="topTitle"><!--顶部--></top-component>
+    <div class="course_box"><!--列表开始-->
+        <div class="tab_content">
+            <ul id="cut_list">
+                <li class="clearfix" v-for="item in items" data-sliceid="{{item.SliceID}}" data-name="{{item.Name}}" v-on:tap="gotoSliceCaption($event)">
+                    <div class="li_img_box"><a href="###" style="background:url({{item.ThumbnailUrl}}) no-repeat center center; background-size:100% 100%;"></a></div>
+                    <div class="li_content_box" >
+                        <h3>{{item.Name}}</h3>
+                        <p><span class="lts2">尺</span>寸：{{item.Size}}</p>
+                        <p>拍摄倍数：{{item.ShotTimes}}</p>
+                        <p>染色方法：{{item.StainingMethod}}</p>
+                        <p>标本来源：{{item.Owner}}</p>
+                        <p><span class="lts1">点击</span>量：{{item.ViewCount}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div><!--列表结束-->  
+    <function-component><!--功能键弹框--></function-component>
+</div>
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="Component/functionComponent.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+$(function(){
+    var id = getParamUrl("id");//章节id
+    var name = decodeURI(getParamUrl("name"));//章节name
+    var url = common.interfaceBase +"GetSlice/"+id;
+    var method = "get";
+    var result = WAjax(url,method);
+    common.contactUrl(result,"ThumbnailUrl");
+    var cutCalatog = new Vue({//切片目录
+        el: '#cut',
+        data: {
+            items: result,
+            topTitle:name
+        },
+        methods: {
+            gotoSliceCaption: function (event) {
+                var sliceid = event.target.parentElement.parentElement.getAttribute("data-sliceid");
+                var name = event.target.parentElement.parentElement.getAttribute("data-name");
+                var url = "qp.html?id="+sliceid+"&name="+name+"&type="+getParamUrl("type");
+                common.recordHistory(window.location.href);
+                window.location.href=encodeURI(url);
+            }
+        }
+    })
+    $(".cut_box").css({'margin-top':$(".top").height()});
+});
+
+</script>
+</body>
+</html>

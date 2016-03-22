@@ -1,0 +1,277 @@
+/* CSS Document */
+
+.top{ height:34px}
+	.top .message{ right:13px; width:23px; height:23px; margin-top:-11px;}
+	.top h1{ font-size:17px; line-height:40px;}
+	.top .search{ height:24px; border-radius:12px; -webkit-border-radius:12px;}
+	.top .search input[type=text]{ height:24px; line-height:24px; font-size:10px;}
+	.top .search .btns_search{ width:16px; height:16px;}
+	.banner{ margin-top:34px;}
+	.img_library li .img_box{ width:48px; height:54px;}
+	.img_library li h4{ font-size:10px; line-height:14px;}
+
+	.top .top_btns{ top:9px; width:43px; height:22px;}
+	.top .top_btns a{ font-size:14px; line-height:22px;}
+	.top .more a{ font-size:15px; letter-spacing:-5px; line-height:33px;}
+	.top .cancle{ line-height:40px; font-size:16px;}
+	.top .back{ width:11px; height:17px; margin-top:-8px;}
+	.top .top_cancle{ top:9px;}
+	.top .top_cancle a{ font-size:14px; line-height:22px;}
+	.img_word,.exam_save,.exam_count{ font-size:10px; top:2px; line-height:16px;}
+	.img_word span,.exam_save span,.exam_count span{ height:20px;}
+	.img_word span img,.exam_save span img,.exam_count span img{ width:20px; height:20px;}
+	.top .exam_time{ top:6px; margin-left:-14px; width:28px; height:28px;}
+	/*top切换*/
+	.top_exam{ padding:2px 0;}
+	.top_exam img.view{ width:35px; height:35px;}
+	.top_exam img.count{ width:35px; height:35px;}
+	.top_exam img.save{ width:35px; height:35px;}
+
+
+.course_box,.taolun_box{ margin-top:40px;}
+.tab_ul .fleft{ font-size:14px; line-height:43px;}
+.tab_ul #kcall a.select_span,.tab_ul #notread a.select_span,.tab_ul #saveall a.select_span{ line-height:43px;}
+.tab_ul #kcall a.select_span:after,.tab_ul #saveall a.select_span:after{ right:-12px; top:8px; border-top:4px solid #9d9d9d; border-left:4px solid transparent; border-right:4px solid transparent;}
+.tab_ul #notread a.select_span:before{ right:-12px; top:5px; border-bottom:4px solid #9d9d9d; border-left:4px solid transparent; border-right:4px solid transparent;}
+.tab_ul #notread a.select_span:after{ right:-12px; top:11px; border-top:4px solid #9d9d9d; border-left:4px solid transparent; border-right:4px solid transparent;}
+.tab_ul #notread.selectbefore a.select_span:before{ border-bottom:4px solid #ffb33b; border-left:4px solid transparent; border-right:4px solid transparent;}
+.tab_ul #notread.selectafter a.select_span:after{ border-top:4px solid #ffb33b; border-left:4px solid transparent; border-right:4px solid transparent;}
+.tab_ul #kcall.selected a.select_span:after,.tab_ul #saveall.selected a.select_span:after{ right:-12px; top:8px; border-top:4px solid #ffb33b; border-left:4px solid transparent; border-right:4px solid transparent;}
+.large_fixed{ top:45px;}
+.large_fixed ul li{ width:100%; border-bottom:1px solid #eee; height:45px;}
+.large_fixed ul li a{ line-height:45px; font-size:13px;}
+.search_fixed{ height:40px}
+.tab_content li .li_img_box{ height:96px;}
+.tab_content li .li_content_box{ height:96px;}
+.tab_content li .li_content_box h1{ font-size:14px; line-height:26px;}
+.tab_content li .li_content_box h3{ font-size:12px; line-height:16px;}
+.tab_content li .li_content_box h3.color1{ line-height:24px;}
+.tab_content li .li_content_box .btnsBoxs{ bottom:5px; width:26px; height:19px;}
+.tab_content li .li_content_box .star{ right:3%;}
+.tab_content li .li_content_box .btnsBoxs span{ width:19px; height:19px;}
+#search_list ul{ padding-top:5px;}
+#search_list li h1{ font-size:14px; line-height:20px; margin-top:5px;}
+#search_list li p{ font-size:12px; line-height:17px;}
+/*搜索框*/
+.top .search{ height:28px; border-radius:14px; -webkit-border-radius:14px;}
+.top .search input[type=text]{ height:27px; line-height:27px; font-size:12px;}
+.top .search .btns_search{ width:18px; height:18px; margin:2% 2% 0 0;}
+#kcSearch{ height:40px;}
+#kcSearch .search{ height:30px; border-radius:15px; -webkit-border-radius:15px;}
+#kcSearch .search input{ height:30px; font-size:10px; line-height:30px;}
+#kcSearch .search .btns_search{ width:18px; height:18px;}
+
+
+/*列表样式*/
+.history_list .title{ width:76px;}
+.history_list .title h1{ font-size:15px; line-height:22px;}
+.history_list .title .img_span{ width:12px; height:22px;}
+.history_list li .li_img_box{  height:96px;}
+.history_list li .li_content_box{ height:96px;}
+.history_list li .li_content_box h1{ font-size:14px; line-height:26px;}
+.history_list li .li_content_box h3{ font-size:12px; line-height:16px;}
+.history_list li .li_content_box h3.color1{ line-height:26px;}
+.history_list li .li_content_box span{ font-size:12px; line-height:24px;}
+.history_list li .li_content_box .btnsBoxs{ bottom:5px; width:26px; height:19px;}
+.history_list li .li_content_box .star span{ width:19px; height:19px;}
+
+/*切片库*/
+.img_library li .img_box{ width:55px; height:63px;}
+.img_library li h4{ font-size:11px; line-height:14px;}
+
+.search_box{ margin-top:40px;}
+.search_list li a{ font-size:15px; line-height:24px;}
+.search_box .title h1{ font-size:15px; line-height:18px;}
+.search_box .title .img_span{ width:18px; height:18px;}
+.empty{ font-size:15px; line-height:32px;}
+.empty img{ width:18px; height:18px; margin-top:-4px;}
+
+.bor_b label{ width:18%; font-size:14px; line-height:48px;}
+.bor_b input[type=text],.bor_b input[type=password]{ height:48px; line-height:48px; font-size:14px;}
+#login_in{ height:40px; font-size:14px; line-height:40px;}
+.phone_box .yanzhengma{ font-size:12px; line-height:16px; top:15px;}
+.no-empty label{ top:-10px; font-size:10px; line-height:16px;}
+.wrong label{ top:-10px; font-size:10px; line-height:16px;}
+.forget_a{ font-size:12px; line-height:20px;}
+.color_ip{ font-size:12px; line-height:20px;}
+
+#cut_list li h3{ font-size:14px; line-height:17px;}
+#cut_list li p{ font-size:12px; line-height:15px;}
+.cut_info_img .screen{ width:34px; height:34px;}
+
+.fixed_list li a{ font-size:15px; line-height:38px;}
+.fixed_list .cancleImg a{ font-size:15px; line-height:38px;}
+.cut_info_img .txt{ font-size:14px; line-height:30px;}
+.tabs a{ font-size:16px; line-height:40px; height:40px;}
+.tabs a.exercise{ font-size:10px; background-size:21px 21px;}
+.tabs a.exercise span{ margin-top:4px; height:21px;}
+.tabs a.exercise span img{ width:21px; height:21px;}
+.tabs a.selected.exercise{ background-size:21px 21px;}
+
+/*评论*/
+.tab_content_list,#lianxi{ padding-bottom:47px;}
+.tab_content_list li .widthscreen{ width:100%;}
+.tab_content_list li .touxiang,.tab_content_list li .touxiang img{ width:34px; height:34px;}
+.tab_content_list li .nameBox{ width:87%;}
+.nameBox h2{ font-size:12px; line-height:18px;}
+.nameBox p{ font-size:10px; line-height:14px;}
+.tab_content_list li .huifu{ font-size:12px; line-height:14px; margin-top:3%;}
+.huifu span,.huifu span img{ width:14px; height:14px;}
+.tab_content_list li .huifuContent{ font-size:12px; line-height:20px;}
+.tab_content_list li .Contents{ font-size:11px; line-height:16px;}
+.Contents p.title{ font-size:12px; line-height:16px;}
+.Contents span.imgs,.Contents span.imgs img{ width:63px; height:63px;}
+.nameBox span.times{ font-size:12px; line-height:16px;}
+.nameBox .reply{ font-size:12px; line-height:16px;}
+.nameBox .reply span{ width:14px; height:14px;}
+.nameBox .reply span img{ width:14px; height:14px;}
+p.xinde{ font-size:12px; line-height:20px;}
+
+/*写评论*/
+.write_msg textarea{ line-height:22px; font-size:16px;}
+
+/*评论浮动*/
+.pinglun_fixed{ height:47px;}
+.pinglun_fixed input[type=text]{ height:26px; line-height:26px; margin-top:10px;}
+.pinglun_fixed a{ height:26px; font-size:15px; line-height:26px; margin-top:10px;}
+
+/*标注列表*/
+.exercise_list li{ background-size:10px 17px;}
+.exercise_list li a{ font-size:15px; line-height:40px;}
+/*练习模式*/
+#lianxi h1{ font-size:15px; line-height:40px;}
+#lianxi textarea{ height:50px; font-size:12px; line-height:20px; height:105px;}
+#lianxi p{ font-size:10px; line-height:12px;}
+#lianxi .lianxi_fixed{ height:47px;}
+.lianxi_fixed a{ line-height:46px; font-size:15px;}
+/*练习历史*/
+.exam_history h1{ background-size:10px 17px; font-size:16px; line-height:50px;}
+.exam_history h1 span{ width:29px; height:29px; margin:10px 5px 0 0; background-size:19px 19px;}
+#lianxi_type li, #lianxi_type li.selected{ background-size:16px 9px;}
+
+/*练习题目*/
+.exam_Q h1{ font-size:15px; line-height:22px;}
+.exam_Q h1 span{ width:22px; height:22px;}
+.exam_Q  li a{ font-size:15px; line-height:30px;}
+.exam_Q  li a span{ width:30px; height:30px; line-height:30px;}
+.exam_Q .submit_btns a{ font-size:15px; line-height:38px;}
+/*填空题*/
+.tiankong textarea{ height:150px; font-size:12px; line-height:22px;}
+/*暂停弹框*/
+.exam_pause{ width:281px; height:186px; margin:-93px 0 0 -140px;}
+.exam_pause h1{ font-size:24px; line-height:50px; margin-top:25px;}
+.exam_pause p{ font-size:18px; line-height:30px;}
+.exam_pause a{ line-height:44px; font-size:18px;}
+/*准备交卷弹框*/
+.exam_finish{ max-height:300px; padding:5px 0;}
+.exam_finish .down{ margin:8px auto 0 auto;}
+.exam_finish .down img{ width:40px; height:15px;}
+.exam_finish .finish_btn{ margin:10px auto;}
+.exam_finish .finish_btn a{ font-size:18px; line-height:36px;}
+.exam_finish .finish_btn_clear{ margin:5px auto;}
+.finish_btn_clear .left{ float:left; display:inline; width:70%; font-size:1em; line-height:2em; text-align:left;}
+.finish_btn_clear .left span.right_A{ color:#4dd1b1; font-size:1.2em; padding:0 0.3em;}
+.finish_btn_clear .left span.wrong_A{ color:#f15e5e; font-size:1.2em; padding:0 0.3em;}
+.finish_btn_clear .right{ float:right; display:inline; width:25%; background:#4dd1b1; border-radius:0.3em; -webkit-border-radius:0.3em; font-size:1em; line-height:2em; color:#fff; cursor:pointer;}
+.exam_finish .exam_number{ margin:5px 0 0 0;}
+.exam_number ul{ margin:5px auto;}
+.exam_number li{ margin:5px 4px 5px 4px; width:41px; line-height:40px; font-size:18px;}
+/*试题详解*/
+.Q_introduce{ margin-top:5px;}
+.Q_introduce h1{ font-size:16px; line-height:26px;}
+.Q_xiangjie p.info{ font-size:12px; line-height:20px;}
+.knowlarge .btns{ margin-top:10px;}
+.knowlarge .btns a{ font-size:12px; line-height:30px;}
+.tongji p.title{ font-size:14px; line-height:20px;}
+.tongji p.nums{ font-size:30px; line-height:40px;}
+.tongji p.gride{ font-size:12px; line-height:20px;}
+/*评论*/
+#pinglun #fenxi{ font-size:16px; line-height:26px;}
+#pinglun #fenxi span.numbers{ font-size:12px; line-height:26px;}
+
+.exam_list ul{ max-height:300px;}
+.exam_list li{ margin:5px 5px 0 0; padding:0 10px;}
+.exam_list li a{ font-size:13px; line-height:26px;}
+.exam_list .enter_exam{ font-size:17px; line-height:46px; color:#fff;}
+.exam_list .select_save{ margin:5px auto 5px auto;}
+.exam_list .select_save label{ font-size:15px; line-height:18px; padding-left:20px; background-size:18px 18px;}
+.exam_list .select_save label.lblchecked{ background-size:18px 18px;}
+.exam_list .select_save a{ background-size:18px 18px; padding-left:20px; font-size:15px; line-height:18px;}
+
+/*练习菜单*/
+.exercise_menu{ height:170px; left:0; z-index:6;}
+.exercise_menu .outer_circle{ width:285px; height:285px;}
+.exercise_menu .inner_circle{ width:100px; height:100px; margin:-50px 0 0 -50px;}
+.inner_circle a{ top:26px; width:100px; height:57px; font-size:10px; line-height:20px; margin-left:-18px;}
+.inner_circle a span{ width:37px; height:37px;;}
+.inner_circle a span img{ width:23px; height:21px; padding-top:8px;}
+.inner_circle #nth-child1 { top:-65px; left:0; margin:0 0 0 0;}
+.inner_circle #nth-child1 span{ background:#a8dd97;}
+.inner_circle #nth-child2 { left:-100px; top:40px; margin:-26px 0 0 0;}
+.inner_circle #nth-child2 span{ background:#4dd1bd;}
+.inner_circle #nth-child3 { top:40px; bottom:0; left:0; margin:-26px 0 0 0;}
+.inner_circle #nth-child3 span{ background:#fe735e;}
+.inner_circle #nth-child4 { left:100px; top:40px; margin:-26px 0 0 0;}
+.inner_circle #nth-child4 span{ background:#f6ba5a;}
+#exam_history li{ padding:10px 0; background-size:10px 17px;}
+#exam_history li span{ font-size:12px; line-height:20px; margin-left:0;}
+#exam_history li a{ font-size:15px; line-height:20px}
+
+/*练习报告*/
+.exam_gride span{ line-height:20px;}
+.exam_gride h1{ font-size:80px; line-height:100px;}
+.exam_gride span.total{ font-size:12px;}
+.exam_gride span.fen{ font-size:15px;}
+/*考试情况*/
+.exam_infomation h2{ font-size:15px; line-height:22px;}
+.exam_infomation h3{ font-size:14px; line-height:20px;}
+/*模考得分趋势*/
+.exam_infomation_list h2{ font-size:15px; line-height:26px;}
+.exam_infomation_list li a{ font-size:15px; line-height:20px;}
+.resolve_fixed li a{ font-size:17px; line-height:46px; color:#fff;}
+
+/*组卷模考*/
+.exam_before p{font-size:15px; line-height:22px;}
+.exam_before p.title{ font-size:17px; line-height:30px}
+.exam_begin .nextNotView label{ font-size:14px; line-height:16px; padding-left:18px; background-size:15px 15px;}
+.exam_begin .nextNotView label.lblchecked{ background-size:15px 15px;}
+.exam_begin .begin a{ font-size:17px; line-height:44px;}
+
+#zuzhi_list li span img{ width:21px; height:15px;}
+#zuzhi_list li.selected{ background-size:16px 9px;}
+#zuzhi_list li .cut_list li a{ font-size:14px; line-height:28px;}
+#zuzhi_list li .cut_list .cancleImg a{ font-size:14px; line-height:28px;}
+.pinglun_fixed_xinde{ font-size:17px; line-height:46px; color:#fff;}
+
+.my_info{ top:30px;}
+.my_info img{ width:69px; height:69px;}
+.my_info p{ font-size:14px; line-height:24px;}
+.setting,.setting img{ width:20px; height:20px;}
+.jifen_box li p{ font-size:14px; line-height:18px;}
+.jifen_jiangbei .title a{ font-size:18px; line-height:20px;}
+/*排行列表*/
+.paihang_list li img{ width:44px; height:44px;}
+.paihang_list li p{ font-size:18px; line-height:44px;}
+.paihang_list li p.num{ width:18px;}
+.paihang_list li p a.names{ font-size:16px; line-height:24px;}
+.paihang_list li p a.numbers{ font-size:12px; line-height:16px;}
+.paihang_list li span{ font-size:24px; line-height:44px;}
+/*设置*/
+.setting_box li{ background-size:13px 21px;}
+.setting_box li a{ font-size:14px; line-height:68px; font-weight:normal; color:#5a5a5a;}
+.setting_box li span,.setting_box li span img{ width:68px; height:68px}
+.outer_infos a{ font-size:17px; line-height:46px;}
+.change_touxiang li a{ font-size:18px; line-height:46px;}
+.change_touxiang .btns a{ font-size:18px; line-height:46px;}
+
+.contact_search{ padding:10px 0;}
+.contact_search .box input[type="text"]{ font-size:14px; line-height:26px;}
+.contact_search .box a{ width:18px; height:18px; margin:4px 2% 0 0;}
+.contact_search .box a img{ height:18px; width:18px;}
+
+#ContactList h3{ font-size:14px; line-height:26px;}
+#ContactList li img{ width:41px; height:41px;}
+#ContactList li a{ font-size:15px; line-height:50px;}
+
+/*字母列表*/
+.letter_fixed li a{ font-size:14px; line-height:16px;}

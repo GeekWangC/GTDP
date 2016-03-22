@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>试题收藏</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+	<div class="back"><a href="lianxi.html"><img src="img/back.png" /></a></div>
+    <div class="message"><a href="###" onclick="saveUrl()"></a></div>
+    <h1>试题收藏</h1>
+</div>
+<!--顶部结束-->
+
+<!--收藏开始-->
+<div id="bgwin"></div>
+<div class="course_box">
+    <div class="menu">
+    	<div class="tab_ul clearfix">
+        	<div class="fleft selected" id="kcall">
+	            <a class="select_span">全部科目</a>
+	        </div>
+	        <div class="fleft" id="notread">
+	            <a class="select_span">试题收藏</a>
+	        </div>
+            <div class="fleft" id="btnsearch">
+            	<a>搜索</a>
+            </div>
+        </div>
+        <div class="large_fixed" id="example-1">
+			<!-- 收藏类型 -->
+            <ul class="none" id="saveall_list">
+                <li  class="selected" id="ExerciseList"><a href="javascript:void(0)">练习收藏</a></li>
+                <li  id="ExaminationList"><a href="javascript:void(0)">模考收藏</a></li>
+            </ul>
+            <!-- 课程列表 -->
+            <ul class="none" id="kcall_list" >
+			    <template v-for="item in items ">
+			        <li  id="{{item.id}}" onclick="showList({{item.id}})">
+			          <a href="javascript:void(0);">{{ item.name }}</a>
+			        </li>
+			    </template>    
+            </ul>
+            <div class="search_fixed none" id="btnsearchBox">
+                <div id="kcSearch">
+                    <div class="search clearfix">
+                        <form id="formSearch" action="" method="post" class="clearfix">
+                            <input type="text" value="" id="input_search" placeholder="课程关键字"/>
+                            <a href="javascript:void(0)" id="btns_search" class="btns_search"></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	    <div class="tab_content" id="collectList">
+    	<ul id="kc_list">
+    		<template v-for="item in items ">
+            <li class="clearfix" onclick="gotoTest({{ item.Id }})" v-if="item.type != 1">
+                <div class="li_img_box"><a href="###" style="background:url(http://115.29.97.231:3000/{{ item.ThumbnailUrl }}) no-repeat center center; background-size:100% 100%;"></a></div>
+                <div class="li_content_box" >
+                    <h1>{{ item.ExerciseName }}</h1>
+                    <h3>{{ item.mytime }}，共{{ item.QuestionNum }}题，得分{{ item.Score }}</h3>
+                    <h3 class="color1">{{ item.ExerciseName }}</h3>
+                    <div class="btnsBoxs star selected" onclick="deleteCollection({{ item.Id }})"><span></span></div>
+                </div>
+            </li>
+            <li onclick="singleTest({{ item.QuestionId }})" v-else >
+            	<div class="li_img_box"><a href="###" style="background:url(http://115.29.97.231:3000/{{ item.ThumbnailUrl }}) no-repeat center center; background-size:100% 100%;"></a></div>
+            	<div class="li_content_box" >
+                    <h1>{{ item.Content }}</h1>
+                    <h3>答对{{ item.MyRightCount }}次，答错{{ item.MyErrorCount }}次</h3>
+                    <h3 class="color1">{{ item.CourseName }}</h3>
+                    <div class="btnsBoxs star selected" onclick="deleteCollection({{ item.QuestionId }})"><span></span></div>
+                </div>
+            </li>
+            </template>
+        </ul>
+    </div>
+</div>
+<!--收藏结束-->
+<script src="js/divselect.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+var courseID;
+var resultList;
+var keyword;
+var type = 1;//1：试题 3:练习 6：模拟 
+$(function(){
+	
+		
+	$(".tab_ul .fleft").click(function(){
+		$(this).addClass("selected").siblings().removeClass("selected");
+		if($(this).attr('id') == 'kcall'){
+			$("#saveall_list,#btnsearchBox").hide();
+			$("#input_search").val("");
+			if($("#kcall_list").is(":hidden")){
+				$("#kcall_list,#bgwin").show();
+				$("#bgwin").css({'opacity':'0.5'});
+			}else {
+				$("#kcall_list,#bgwin").hide();
+			}
+			var codetxt = $(this).find('.select_span');
+			$("#kcall_list li").click(function(){
+				$(this).addClass("selected").siblings().removeClass("selected");
+				codetxt.text($(this).text());
+				$("#kcall_list,#bgwin").hide();
+			});
+		}  else if($(this).attr('id') == 'notread'){//未读最新
+				$("#kcall_list,#btnsearchBox,#bgwin").hide();
+				var codetxt = $(this).find('.select_span');
+				if(codetxt.text() == "试题收藏"){
+					$(this).addClass("selectbefore").removeClass("selectafter");
+					codetxt.text('练习收藏');
+					type = 3;
+					loadData();
+				} else if(codetxt.text() == "练习收藏"){
+					$(this).addClass("selectbefore").removeClass("selectafter");
+					codetxt.text('模考收藏');
+					type = 6;
+					loadData();
+				}else{
+					$(this).addClass("selectafter").removeClass("selectbefore");
+					codetxt.text('试题收藏');
+					type = 1;
+					loadData();
+				}
+				$("#inputselect-type").val(type);
+		} else if($(this).attr('id') == 'btnsearch'){
+			$("#kcall_list,#notread_list,#bgwin").hide();
+			if($("#btnsearchBox").is(":hidden")){
+				$("#btnsearchBox,#bgwin").show();
+				$("#bgwin").css({'opacity':'0.5'});
+			}else {
+				$("#btnsearchBox,#bgwin").hide();
+				$("#input_search").val("");
+			}
+		} else {
+			$("#notread_list,#kcall_list,#btnsearchBox,#bgwin").hide();
+			$("#input_search").val("");
+		}
+	});
+	courseAll();
+	courseID="";
+	keyword="";
+	colloctType=0;
+	loadData();
+});
+
+
+var example1 = new Vue({
+  el: '#example-1',
+  data: {
+  items:[],
+  }
+})
+
+var example2 = new Vue({
+  el: '#collectList',
+  data: {
+  items:[]
+  }
+})
+
+function courseAll(){
+	var url = "http://115.29.97.231:3000/api/Mobile/getAllCourses";
+    var method = "get";
+    var result = WAjax(url,method);
+    example1.items=result;
+}
+
+$("#btns_search").on("click",function(){
+	if($("#input_search").val() != ""){
+		keyword = $("#input_search").val();
+	}
+
+	loadData();
+});
+
+// 数据加载
+function loadData(){
+	var url = "http://115.29.97.231:3000/api/Mobile/GetMyCollection?courseId="+courseID+"&keyword="+keyword;
+	var method = "get";
+	resultList = WAjax(url,method);
+
+	if (resultList =="") {
+		alert("无");
+		return;
+	};
+	$("#kcall_list,#bgwin").hide();
+	$("#saveall_list,#btnsearchBox").hide();
+
+	var result = resultList;
+	var QuestionListresult = result.QuestionList;
+	var ExerciseListresult = result.ExerciseList;
+	var ExaminationListresult = result.ExaminationList;
+
+	for (var i = 0; i < QuestionListresult.length; i++) {
+		QuestionListresult[i].type=1;
+		// QuestionListresult[i].mytime=new Date(QuestionListresult[i].CreateDate).format('yyyy年MM月dd日');
+	}
+	for (var i = 0; i < ExerciseListresult.length; i++) {
+		ExerciseListresult[i].mytime=new Date(ExerciseListresult[i].CreateDate).format('yyyy年MM月dd日');
+		ExerciseListresult[i].type=3;
+	}
+	for (var i = 0; i < ExaminationListresult.length; i++) {
+		ExaminationListresult[i].mytime=new Date(ExaminationListresult[i].CreateDate).format('yyyy年MM月dd日');
+		ExaminationListresult[i].type=6;
+	}
+
+	switch(type)
+    {
+        case 1://试题收藏
+        	example2.items = QuestionListresult;
+          	break;
+        case 3://练习收藏
+			example2.items = ExerciseListresult;
+         	 break;
+        case 6://模考收藏
+        	example2.items = ExaminationListresult;
+         	 break;  
+        default:
+         	 break;
+    }
+}
+
+function showList(id){
+	courseID=id;
+	loadData();
+}
+
+function gotoTest(id){
+	window.location.href="errorAnalyse.html?ExerciseID="+id+"&type=2&collectTest=0";
+}
+
+function singleTest(id){
+	window.location.href="errorAnalyse.html?questionID="+id+"&type=2&collectTest=1";
+}
+
+function saveUrl(){
+    localStorage["saveUrl"] = "collectTest.html";
+    window.location.href="messages.html";
+}
+
+function deleteCollection(id){
+	var url = "http://115.29.97.231:3000/api/Mobile/DeleteCollection/"+id+"?collectType="+type;
+    var method = "post";
+    var result = WAjax(url,method);
+    if (result) {
+    	loadData();
+    };
+}
+</script>
+</body>
+</html>

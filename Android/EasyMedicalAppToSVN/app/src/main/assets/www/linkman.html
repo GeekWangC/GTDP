@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- 联系人列表 wangc-o -->
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>切片库目录</title>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/common.css"/>
+	<link rel="stylesheet" type="text/css" href="css/cut.css"/>
+</head>
+<body>
+	<div id="linkman-list">
+		<ul v-for="linkperson in linkPersons">
+			<li>{{linkperson.UserName}}</li>
+		</ul>
+	</div>
+
+	<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+	<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+	<script>
+	var linkManList = new Vue({
+		el: '#linkman-list',
+		data: {
+			linkPersons: "",
+
+		},
+		methods:{
+			showSection:function(ID,ParentID){
+				if (sectionsid != undefined) {
+				    sectionsid = sectionsid+","+ID;
+				}else{
+				    sectionsid=ID;
+				}
+			}   
+		}
+    })  
+
+    var url = common.interfaceBase + "GetStuOfGrade";
+	var method = "get";
+	linkManList.linkPersons = WAjax(url,method);
+	</script>
+</body>
+</html>

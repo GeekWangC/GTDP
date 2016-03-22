@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<!-- 练习首页-统计信息 -->
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>统计信息</title>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/common.css"/>
+	<link rel="stylesheet" type="text/css" href="css/exercise.css"/>
+	<style>
+	body{ background:#f8f8f8;height:100%;}
+	body,html{overflow-x:hidden;}
+	</style>
+</head>
+<body>
+	<!--顶部开始-->
+	<div class="top">
+		<div class="back"><a href="###" onclick="back()"><img src="img/back.png" /></a></div>
+		<div class="message"><a href="###" onclick="saveUrl()"><img src="img/chat.png" /></a></div>
+	    <h1>统计信息</h1>
+	</div>
+	
+	<!--顶部结束-->
+	<div class="count_box">
+		<ul class="tab_ul clearfix">
+	    	<li class="selected" data-id="Qexercise">题库练习</li>
+	        <li data-id="Modeltest">模拟考试</li>
+	    </ul>
+	    <div class="count_list">
+	    	<div id="Qexercise">
+	    		<canvas id="exer-Statistics">
+					你用这么破的浏览器好吗？
+				</canvas>
+	        </div>
+	    </div>
+	</div>
+	<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+	<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="js/common/pieGraph.js" type="text/javascript" charset="utf-8" ></script>
+	<script>
+	$(function(){
+		$(".tab_ul li").click(function(){
+			$(this).addClass("selected").siblings().removeClass("selected");
+			var dataID = $(this).data('id');
+			if(dataID == "Modeltest"){
+				type = 2;
+				draw(courseID[num],2);
+			}else{
+				type = 1;
+				draw(courseID[num],1);
+			}
+			//$("#" + dataID).removeClass("none").siblings().addClass("none");
+		});
+		
+		$(".count_box").css({'margin-top':$(".top").height()});//头部固定
+		var courseID = [
+			{name:"大体病理",id:1},
+			{name:"病理学",id:2},
+			{name:"组织学",id:3},
+			{name:"寄生虫",id:4}
+		];//科目对象数组
+
+		var num = 0;//滑动计数
+		var type = 1;//模块类型
+		$(".count_box").swipeLeft(function(){
+			num += 1;
+			if(num > 3){
+				num = 0;
+			}
+			draw(courseID[num],type);
+		});
+		$(".count_box").swipeRight(function(){
+			num -= 1;
+			if(num < 0){
+				num = 3;
+			}
+			draw(courseID[num],type);
+		});
+		draw(courseID[0],1);
+		document.body.addEventListener('touchmove', function (event) {
+		    event.preventDefault();
+		}, false);
+		
+	});
+
+	var draw = function(course,type){
+		var courseName = course.name || "大体病理";
+		var courseId = course.id || 1;
+		var type = type || 1;
+		var url = "";
+		/*题库练习统计信息*/
+		if(type == 1){
+			url = common.interfaceBase + "GetExerStatistics?courseId="+courseId
+		}else{
+			url = common.interfaceBase + "GetExamStatistics?courseId="+courseId
+		}
+		
+		var method = "get";
+		var result = WAjax(url,method);
+
+		if(type == 1){
+			if(result.HasStudy == 0){
+				var data = {
+					'做错': {'figure': result.MyWrong, 'color': '#FD8961'},
+					'做对': {'figure': result.MyRight, 'color': '#B3D465'},
+					'未做': {'figure': -1, 'color': '#EFEFEF'},
+				}
+			}else{
+				var data = {
+					'做错': {'figure': result.MyWrong, 'color': '#FD8961'},
+					'做对': {'figure': result.MyRight, 'color': '#B3D465'},
+					'未做': {'figure': result.NoStudy, 'color': '#4DD1B0'},
+				}
+			}
+			
+			var text = {
+				section:courseName,
+				title:"累计做题数",
+				sumdo:result.HasStudy
+			}
+		}else{
+			if(result.Times == 0){
+				var data = {
+					'不及格': {'figure': 0, 'color': '#FD8961'},
+					'及格(60分以上)': {'figure': 0, 'color': '#B3D465'},
+					'未完成': {'figure': 1, 'color': '#EFEFEF'},
+				}
+			}else{
+				var unPassedCount = Math.floor(result.UnPassed/100 * result.Times);
+				var unFinished = Math.floor(result.UnFinished/100 * result.Times);
+				var passedCount = Math.floor(result.Passed/100 * result.Times);
+				var data = {
+					'不及格': {'figure': unPassedCount, 'color': '#FD8961'},
+					'及格(60分以上)': {'figure': passedCount, 'color': '#B3D465'},
+					'未完成': {'figure': unFinished, 'color': '#4DD1B0'},
+				}
+			}
+			
+			var text = {
+				section:courseName,
+				title:"累计模拟数",
+				sumdo:result.Times
+			}
+		}
+		
+		var opt1 = {
+            data: data,
+            //align: 'left',
+            text: text,
+            typeData:type,
+            wrapper: document.getElementById('exer-Statistics'),
+            r: 200,
+            type: 'ringchart'
+        };
+        
+        var fcs1 = new fchart(opt1);
+	}
+
+	/*绘制统计信息*/
+	/*var draw = function(ctx,cvs,noStudyRate){
+		var pointCenter = [cvs.width / 2,cvs.height /2];
+		ctx.save();
+		ctx.fillStyle = "#4DD1B0";
+		ctx.strokeStyle = "#F8F8F8";
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		ctx.arc(pointCenter[0],pointCenter[1],pointCenter[1]*100/116,Math.PI,Math.PI*(1+360*(1-noStudyRate)/180),true);
+		ctx.lineTo(pointCenter[0],pointCenter[1]);
+		ctx.lineTo(pointCenter[0]-pointCenter[1]*100/116,pointCenter[1]);
+		ctx.fill();
+		ctx.stroke();
+		ctx.closePath();
+		ctx.restore();
+		
+		ctx.fillStyle = "#F8F8F8";
+		ctx.strokeStyle = "#F8F8F8";
+		ctx.beginPath();
+		ctx.arc(pointCenter[0],pointCenter[1],pointCenter[1]*77/116,0,Math.PI*2,true);
+		//ctx.lineTo(pointCenter[0],pointCenter[1]);
+		//ctx.lineTo(pointCenter[0]-pointCenter[1]*77/116,pointCenter[1]);
+		ctx.fill();
+		ctx.stroke();
+		ctx.closePath();
+	}
+
+	var zWin = $(".count_list");
+	var winWidth = zWin.width();
+	var exerCanvas = document.getElementById("exer-Statistics");
+	exerCanvas.width = winWidth;
+	exerCanvas.height = winWidth*3/4;
+	var exerContext = exerCanvas.getContext("2d");
+	draw(exerContext,exerCanvas,0.95);
+	*/
+	
+	
+function back(){
+    window.location.href = "lianxi.html";
+}
+
+function saveUrl(){
+    localStorage["saveUrl"] = window.location.href;
+    window.location.href="messages.html";
+
+}
+	</script>
+
+</body>
+</html>

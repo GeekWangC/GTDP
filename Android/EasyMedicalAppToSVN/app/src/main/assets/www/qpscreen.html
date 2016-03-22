@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>内皮（中动脉与中静脉）</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common.css"/>
+<link rel="stylesheet" type="text/css" href="css/cut.css"/>
+<link rel="stylesheet" type="text/css" href="js/leaflet-0.7.3/leaflet.css" />
+<script type="text/javascript" src="js/leaflet-0.7.3/leaflet-src.js"></script>
+</head>
+<body id="qp-view">
+<div class="start_page" id="slice"><div id="container">
+    <!-- <div id="tool"> 
+        <a href="javascript:void(0);" id="arr_left" style="position: absolute;top: 12rem;" v-on:click="rotate('myimg','left')">向左</a> 
+        <a href="javascript:void(0);" id="arr_right" style="position: absolute;top: 12rem;right:7rem" v-on:click="rotate('myimg','right')">向右</a> 
+    </div>  -->
+    <canvas id="canvas">
+        年轻人，换个浏览器吧！
+    </canvas>
+</div></div>
+<div class="screen_auto" style="display:none;"><img src="img/screen-auto.png"/></div>
+<div class="change_biger"><img src="img/change-biger.png"/></div>
+<div class="more_menu"><img src="img/more-menu.png"/></div>
+<div class="cut_img"><img src="img/cut-img.png"/></div>
+<div class="shoucang"><img src="img/shoucang.png"/></div>
+<div class="screen_info"><img src="img/screen-info.png"/></div>
+<div class="page_biger_info">2.00x</div>
+
+<!--弹框开始-->
+<div id="bgwin"></div>
+<div class="screen_fixed_list">
+	<ul class="clearfix">
+    	<li><a href="###"><img src="img/bc.png"/><span>标尺</span></a></li>
+        <li style="display:none;"><a href="###"><img src="img/lx.png"/><span>练习</span></a></li>
+        <li id="gotoHome"><a href="###"><img src="img/sy.png"/><span>返回首页</span></a></li>
+    </ul>
+    <div class="cancleImg"><a href="###">取消</a></div>
+</div>
+
+<div id="biaozhu" class="screen_biaozhu">
+	<h1>共有{{biaozhuCount}}条标注</h1>
+    <ul id="biaozhu_list" v-for="data in biaozhuData">
+        <li><a href="###" v-text="data.name"></a></li>
+    </ul>
+</div>
+<!--弹框结束-->
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/hammer/hammer.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/qp.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+$(function(){
+    var config = {//此页面可能需要的参数配置
+        id:getParamUrl("id"),//切片id
+        name:decodeURI(getParamUrl("name")),//切片name
+        type:getParamUrl("type"),//切片类型-区分大体病理
+    };
+    var sliceThonds = {
+        change_biger:function(){
+            
+        }
+    }
+    $(".more_menu").on("tap",function(){
+        $("#bgwin").css({'display':'block'});
+        $("#biaozhu").hide();
+        $(".screen_fixed_list").show();
+    });
+	$(".cut_img").on("tap",function(){
+        if(document.getElementById("biaozhu").style.display=="block"){
+            $("#biaozhu").hide();
+        }else{
+            $("#biaozhu").show();
+        }
+	});
+    $("#gotoHome").on("tap",common.backHome);
+	$("#bgwin,.cancleImg").on("tap",function(){
+		$(".screen_fixed_list,#bgwin,#biaozhu").hide();
+	});
+    $(".screen_info").on("tap",function(){
+        window.location.href = "qp.html?id="+config.id+"&name="+config.name+"&type="+config.type;
+    })
+});
+</script>
+</body>
+</html>

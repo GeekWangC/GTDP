@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/brospecies_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/li_img" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/brocoursename_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="阿米巴"
+                android:textColor="#7a7a7a"
+                android:textSize="14sp"  />
+
+            <TextView
+                android:id="@+id/brolecturername_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="讲师：李教授"
+                android:layout_marginTop="2dp"
+                android:visibility="gone"
+                android:layout_marginBottom="2dp"
+                android:textColor="#6a6a6a"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/brocoursewareCount_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="课件数量：3"
+                    android:textColor="#9a9a9a"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/broallAntegral_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="总积分：40"
+                    android:textColor="#9a9a9a"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/brospecies_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="寄生虫"
+                    android:textColor="#ffb33a"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/broplaytime_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="播放至3分50秒"
+                    android:textColor="#6a6a6a"
+                    android:visibility="gone"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- 某切片目录页面 -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <title>评论列表</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+<body>   
+<div id="cut">
+    <top-component v-bind:top-title="topTitle"><!--顶部--></top-component>
+    <div class="course_box"><!--列表开始-->  
+        <div id="pinglun">
+            <ul class="tab_content_list">
+                <li class="clearfix" v-for="item in items| orderBy 'creatTime' -1">
+                    <div class="touxiang"><img v-bind:src="item.userIcon"/></div>
+                    <div class="nameBox">
+                        <h2 v-text="item.userName"></h2>
+                        <p class="color" v-text="item.commentContent"></p>
+                        <span class="times" v-text="item.newcreatTime"></span>
+                        <div class="reply" v-on:tap="reply($event)" data-id="{{item.commentID}}"><span><img src="img/huifu.png"/></span>回复</div>
+                    </div>
+                </li>
+            </ul>
+            <div class="pinglun_fixed">
+                <a href="###">评论</a>
+            </div>
+        </div>
+    </div><!--列表结束-->  
+    <function-component><!--功能键弹框--></function-component>
+</div>
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="Component/functionComponent.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+$(function(){
+    var cutCalatog = new Vue({//切片目录
+        el: '#cut',
+        data: {
+            items: JSON.parse(window.name),
+        },
+        methods: {
+            gotoSliceCaption: function (event) {
+                var sliceid = event.target.parentElement.parentElement.getAttribute("data-sliceid");
+                var name = event.target.parentElement.parentElement.getAttribute("data-name");
+                var url = "qp.html?id="+sliceid+"&name="+name+"&type="+getParamUrl("type");
+                common.recordHistory(window.location.href);
+                window.location.href=encodeURI(url);
+            }
+        }
+    })
+});
+
+</script>
+</body>
+</html>

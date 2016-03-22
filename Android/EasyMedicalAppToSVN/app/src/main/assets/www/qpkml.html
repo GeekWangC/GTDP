@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!-- 切片库目录页面 wangc-o -->
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>切片库目录</title>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+	<style>
+	.cut_list{ display:block;background: rgba(100%,100%,100%,0.9)}
+	.cut_list{ position:fixed; bottom:0; left:0; background:rgba(100%,100%,100%,0.9); z-index:9999; width:100%; display:none;}
+	.cut_list ul{ width:100%; margin:0 auto; list-style:none;}
+	.cut_list li{ text-align:center; background:#F3F3F3;padding:8px 0;}
+	.cut_list li:last-child { border:0;}
+	.cut_list li a{ font-size:14px; line-height:28px; display:block; margin:0; color:#7d7d7d;}
+	.cancleImg{ width:100%; border-top:1px solid #eee; background:#fff; text-align:center; z-index:9999;}
+	.cancleImg a{ font-size:14px; line-height:44px; color:#7d7d7d;}
+	</style>
+</head>
+<body>
+<div id="section-model">
+	<!--顶部开始-->
+	<div class="top">
+		<div class="back"><a href="javascript:void(0);"><img src="img/back.png" /></a></div>
+		<div class="message"><a href="###" onclick="saveUrl()"></a></div>
+	    <h1>大体病理</h1>
+	</div>
+	<!--顶部结束-->
+	<div id="bgwin1"><!-- 遮罩层 --></div>
+	<section id="section" class="course_box"><!--列表开始-->
+		<div class="exercise_list" id="zuzhi_list"><!-- 章目录 -->
+			<ul id="example-1" class="section-total">
+				<template v-for="item in sectionModelData | filterBy '00000000-0000-0000-0000-000000000000' in 'ParentID'">
+					<li id="{{item.ID}}" class="chapter" v-on:tap="showSection($event)">
+						<a href="javascript:void(0);">{{ item.Name}}</a>
+						<span><a class="section-v" data-href="{{item.VideoUrl}}"  media="handheld" v-on:tap.stop="videoPlay(item.VideoUrl,item.ID)"><img src="img/video-img.png"/></a></span>		
+					</li>
+				</template>
+			</ul>
+		</div>
+		<div class="cut_list" style="display: none;"><!-- 节目录 -->
+			<ul id="section-catalog">
+			<template v-for="itemsection in sectionCatalogData">
+				<li  v-on:tap.stop="gotoSlice($event,itemsection.qpurl)">
+					<a href="javascript:void(0);">{{itemsection.Name}}</a>
+				</li>
+			</template>
+			</ul>
+			<div class="cancleImg"><a href="javascript:void(0);">取消</a></div>
+		</div>
+	</section><!--列表结束-->
+</div>
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+	var config = {//页面用到的公共参数
+		type:getParamUrl("type") || "Tissue",//"Pathology"
+		isShowQPLoger:sessionStorage.isShowQPLoger || true//"切片引导页是否显示"
+	}
+	var sectionModel = new Vue({//切片库目录模板
+		el:"#section-model",
+		data:{
+			sectionModelData:[],//章目录
+			sectionCatalogData:[],//节目录
+			type:""//章节类型
+		},
+		methods:{
+			videoPlay:function(url,id,e){//播放视频
+				if(common.isAndroid){
+					window.local_obj.jsMethod(url,id);
+				}else{
+					getURLVideoIOS(url,id);
+				}
+				common.jsmpzz(e);
+			},
+			showSection:function(event){//展示节目录
+				if(common.isiOS){
+					window.location="IOS:notDisplayStatuesListNotScroll";
+				}
+				$this = event.target.nodeName=="LI" ? $(event.target) : $(event.target).parents("li");
+				var parentID = $this.attr("id");
+				var sectionCatalog = common.reCotainArr(parentID,this.sectionModelData,"ParentID");
+				if(sectionCatalog.length>0){
+					sectionCatalog.forEach(function(e){
+						e.qpurl = "zjqp.html?id="+e.ID+"&name="+e.Name+"&type="+sectionModel.type;
+					})
+				}
+				this.sectionCatalogData = sectionCatalog;
+				$this.addClass("selected").siblings().removeClass("selected");
+				$("#bgwin").css({'display':'block'});
+				$(".cut_list").css({'display':'block'});
+			},
+			gotoSlice: function (event,url) {//进入切片详情页
+				//$(".top").find("h1").text(url);
+				common.recordHistory(window.location.href);
+				if(config.isShowQPLoger !== "false"){
+					window.location.href = "sliceLoger.html?url="+url;
+					sessionStorage.isShowQPLoger = false;
+				}else{	
+					window.location.href = encodeURI(url);
+				}
+			}
+		}
+	});
+	var methods = {};//页面方法
+	methods.typeV = function(type){//根据不同的参数加载不同的页面数据
+		sectionModel.type = type;
+		var $topName = $(".top").find("h1");
+		if(type == "Pathology"){
+			$topName.text("大体病理");
+		}else if(type == "Slice"){
+			$topName.text("病理学");
+		}else if(type == "Tissue"){
+			$topName.text("组织学");
+		}else if(type == "Worm"){
+			$topName.text("寄生虫");
+		}else{
+			$topName.text("大体病理");
+		}
+		var type = type || "Pathology";//章节类型
+		var url = common.interfaceBase + "GetCatalogue?type="+type;
+		var method = "get";
+		var result = WAjax(url,method);
+		common.contactUrl(result,"VideoUrl",common.basrUrl);
+		sectionModel.sectionModelData = result;
+	};
+	methods.cancleJML = function(){//节目录取消事件
+		$(".chapter").children().removeClass("selected");
+		$("#bgwin").hide();
+		$(".cut_list").hide();
+	};
+	methods.cancleGoHistory = function(){//返回
+		common.backHome();
+	};
+	if(common.isAndroid){//android调用
+		//var type = window.local_obj.getHTMLPageURL();
+		config.type = getParamUrl("type");
+	}
+	function getType(typeIOS){//ios调用 获取IOS提供的参数type
+		config.type = typeIOS;
+		methods.typeV(config.type);
+	}
+	function saveUrl(){//ios调用
+		localStorage["saveUrl"] = "qpkml.html?type="+config.type;
+		window.location.href="messages.html";
+	}
+	function getURLVideoIOS(url,id){//ios调用 传给IOS参数  视频url
+		document.location = "iosplayer:="+url+","+id;
+	}
+	$(function(){
+		$("#section").css({'margin-top':$(".top").height()});
+		$(document).on("tap",".cancleImg",methods.cancleJML);
+		$(".back").on("click",methods.cancleGoHistory);
+		methods.typeV(config.type);//PC端测试 删除
+	})
+	</script>
+</body>
+</html>

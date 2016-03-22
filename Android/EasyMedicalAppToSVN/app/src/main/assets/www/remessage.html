@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>回复评论</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+    <div class="top_cancle"><a href="javascript:void(0);">取消</a></div>
+    <div class="top_btns"><a href="javascript:void(0);">发布</a></div>
+    <h1>回复评论</h1>
+</div>
+<!--顶部结束-->
+
+<!--写评论开始-->
+<div class="write_msg" id="msg">
+    <textarea id="conmmentStr" rows="10" cols="10" placeholder="写评论..."></textarea>
+</div>
+
+<!--写评论结束-->
+
+<!--------@定位  开始------------>
+<div class="position_write">
+    <img src="img/@guy.png" onclick="MentionMe()"/>
+</div>
+<!--------@定位  结束------------>
+
+
+</body>
+</html>
+    <script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+    <script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+    <script src="js/lianxi.js" type="text/javascript" charset="utf-8" ></script>
+
+<script>
+var parentID,commentContent,dataID,mentionMe,name,type,QuestionNumber,ExerciseID,QuestionID;
+$(function(){ 
+    if(common.isiOS){
+        window.location="IOS:displayStatues";
+    }
+
+    $("#jianpan").css({"display":"none"});
+
+    parentID = getParamUrl("parentID");
+    
+    if (mentionMe != undefined) {
+         mentionMe = getParamUrl("mentionMe");
+    }else{
+        mentionMe = "";
+    }
+
+    if (getParamUrl("name") != undefined && getParamUrl("name") != "") {
+        name=getParamUrl("name");
+
+        if (getParamUrl("commentContent") != undefined) {
+
+        commentContent = getParamUrl("commentContent");
+        document.getElementById("conmmentStr").innerHTML = commentContent+"@"+name;
+
+        }
+    }else{
+        if (getParamUrl("commentContent") != undefined && getParamUrl("commentContent") != "") {
+
+        commentContent = getParamUrl("commentContent");
+        document.getElementById("conmmentStr").innerHTML = commentContent;
+
+        }else{
+
+            commentContent=$("#conmmentStr").val();
+        }
+    }
+
+    
+    
+    dataID= getParamUrl("dataID");
+    
+
+    if (parentID == undefined) {
+        parentID="";
+    }
+
+    type=getParamUrl("type");
+
+    QuestionNumber = getParamUrl("QuestionNumber");
+
+    ExerciseID = getParamUrl("ExerciseID");
+
+
+    if (getParamUrl("QuestionID") != undefined) {
+        QuestionID = getParamUrl("QuestionID");
+    };
+    /***start***/
+    comment.config = JSON.parse(getParamUrl("data"));
+    $(".top_cancle").on("tap",comment.cancel);
+    $(".top_btns").on("tap",comment.sendComent);
+ }); 
+
+
+$("#msg").on("click",function(){
+    $("#jianpan").css({"display":"block"});
+
+});
+
+
+function MentionMe(){
+
+    commentContent=$("#conmmentStr").val();
+
+    window.location.href="MentionMe.html?commentContent="+commentContent+"&parentID="+parentID+"&dataID="+dataID+"&ExerciseID="+ExerciseID+"&type="+type+"&QuestionNumber="+QuestionNumber+"&QuestionID="+QuestionID;
+
+
+}
+
+
+//评论结构体
+var comment = {}
+comment.config = {
+    commentContent:"",
+    parentID:"",
+    dataID:"",
+    commentType:"",
+    mentionMe:"",
+    picLable:""
+}
+comment.sendComent = function(){
+    if(comment.config){
+        comment.config.mentionMe = mentionMe;
+        comment.config.commentContent = $("#conmmentStr").val();
+        var url = common.interfaceBase + "/SendComment?commentContent="+comment.config.commentContent+"&parentID="+comment.config.parentID+"&dataID="+comment.config.dataID+"&commentType="+comment.config.commentType+"&mentionMe="+comment.config.mentionMe+"&picLable="+comment.config.picLable  
+        var method = "post";
+        var result = WAjax(url,method);
+        if(result){
+            comment.cancel();
+        }
+    }else{
+        $("#jianpan").css({"display":"none"});
+        var picLable="";
+        commentContent=$("#conmmentStr").val();
+        if (commentContent == "") {
+            alert("请填写评论");
+            return;
+        };
+        var url = common.interfaceBase + "SendComment?commentContent="+commentContent+"&parentID="+parentID+"&dataID="+dataID+"&commentType=1&mentionMe="+mentionMe+"&picLable="+picLable;
+        var method = "post";
+        var result = WAjax(url,method);
+        if(result){
+            comment.cancel();
+        }
+    }
+    
+}
+comment.cancel = function(){
+    if(comment.config){
+        if(comment.config.commentType==3){
+            window.location.href="courseDetail.html?id="+comment.config.dataID;
+        }
+    }else{
+        if (type == 3) {
+            window.location.href="stcw.html?QuestionID="+QuestionID+"&ExerciseID="+ExerciseID+"&type=3&QuestionNumber="+QuestionNumber+"&mydetail=yes";
+
+        };
+
+        if (type == 1) {
+            window.location.href="errorAnalyse.html?ExerciseID="+ExerciseID+"&type="+1+"&QuestionNumber="+QuestionNumber;
+        };
+        if (type == 2) {
+            window.location.href="errorAnalyse.html?ExerciseID="+ExerciseID+"&type="+2+"&QuestionNumber="+QuestionNumber;
+            
+        };
+    }
+    
+    
+}
+
+
+
+</script>

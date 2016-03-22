@@ -1,0 +1,336 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#4dd1b0"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/edittext_biankuang"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/search_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="30dp"
+                android:background="#55a88e"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="left|center"
+                android:hint="@string/searchremind"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <ImageButton
+                android:id="@+id/search_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignRight="@+id/search_edittext"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/search"
+                android:gravity="center" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/discuss_Imageview"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/chat" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:background="#ffffff"
+            android:orientation="vertical">
+
+            <!-- 主题图片 -->
+            <com.glodon.easymedicalapptosvn.customview.SlideShowView
+                android:id="@+id/slideshowView"
+                android:layout_width="fill_parent"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/zzxqpk_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="3dp"
+                            android:drawableTop="@drawable/zzxqpk"
+                            android:gravity="center"
+                            android:text="@string/zzxqpk"
+                            android:textColor="#a0a0a0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/blxqpk_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:drawablePadding="3dp"
+                            android:drawableTop="@drawable/blxqpk"
+                            android:gravity="center"
+                            android:text="@string/blxqpk"
+                            android:textColor="#a0a0a0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/dtblqpk_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="3dp"
+                            android:drawableTop="@drawable/dtblqpk"
+                            android:gravity="center"
+                            android:text="@string/dtblqpk"
+                            android:textColor="#a0a0a0"
+                            android:textSize="14sp" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/jscqpk_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="3dp"
+                            android:drawableTop="@drawable/jscqpk"
+                            android:gravity="center"
+                            android:text="@string/jscqpk"
+                            android:textColor="#a0a0a0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/wswqpk_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:drawablePadding="3dp"
+                            android:drawableTop="@drawable/wswqpk"
+                            android:gravity="center"
+                            android:text="@string/wswqpk"
+                            android:textColor="#a0a0a0"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/szptqpk_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="3dp"
+                            android:drawableTop="@drawable/szptqpk"
+                            android:gravity="center"
+                            android:text="@string/szptqpk"
+                            android:textColor="#a0a0a0"
+                            android:textSize="14sp" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginLeft="20dp"
+                android:background="#f1f1f1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:background="@drawable/homeicon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/historical"
+                    android:textColor="#4dd1b0"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <com.glodon.easymedicalapptosvn.utils.ListViewInScrollView
+                android:id="@+id/historicalCurriculum_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#d1d1d1"
+                android:dividerHeight="1px"
+                android:scrollbars="none" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#d1d1d1" />
+
+            <com.glodon.easymedicalapptosvn.utils.ListViewInScrollView
+                android:id="@+id/historicalCourseWare_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#d1d1d1"
+                android:dividerHeight="1px"
+                android:scrollbars="none" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#d1d1d1" />
+
+            <com.glodon.easymedicalapptosvn.utils.ListViewInScrollView
+                android:id="@+id/historicalQuestion_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#d1d1d1"
+                android:dividerHeight="1px"
+                android:scrollbars="none" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#d1d1d1" />
+
+            <com.glodon.easymedicalapptosvn.utils.ListViewInScrollView
+                android:id="@+id/historicalExamQuestion_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#d1d1d1"
+                android:dividerHeight="1px"
+                android:scrollbars="none" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#d1d1d1" />
+
+            <com.glodon.easymedicalapptosvn.utils.ListViewInScrollView
+                android:id="@+id/historicalSlice_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#d1d1d1"
+                android:dividerHeight="1px"
+                android:scrollbars="none" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#d1d1d1" />
+
+            <com.glodon.easymedicalapptosvn.utils.ListViewInScrollView
+                android:id="@+id/historicalVideo_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#d1d1d1"
+                android:dividerHeight="1px"
+                android:scrollbars="none" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginLeft="20dp"
+                android:background="#f1f1f1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:background="@drawable/homeicon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/recommended"
+                    android:textColor="#4dd1b0"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <com.glodon.easymedicalapptosvn.utils.ListViewInScrollView
+                android:id="@+id/recommended_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#d1d1d1"
+                android:dividerHeight="1px"
+                android:scrollbars="none" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

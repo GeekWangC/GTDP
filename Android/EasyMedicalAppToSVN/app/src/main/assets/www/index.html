@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/swipeSlide.css" /><!-- banner图片轮播 -->
+        <title>首页</title>
+    </head>
+    <body>
+        <div class="slide_tab">
+            <div class="tab_box">
+                <span class="btn_left">左</span>
+                <div class="tab">
+                    <span class="item">1{{}}</span>
+                    <span class="item">2</span>
+                    <span class="item">3</span>
+                    <span class="item">4</span>
+                </div>        
+                <span class="btn_right">右</span>
+            </div>
+            <div class="product_box slide">
+                <ul>
+                    <li>
+                        <a href="#" class="pic">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="http://d8.yihaodianimg.com/V00/M0A/75/FD/CgQDslQ3umKAIwpLAAOJQbKq0pg46901_300x300.jpg" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="pic">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="http://d9.yihaodianimg.com/N05/M00/24/DF/CgQI0lQ3umiAYat_AAMa5tG_TXY20001_300x300.jpg" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="pic">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="http://d6.yihaodianimg.com/N05/M02/24/DF/CgQI0lQ3um2AEZpbAANwKuHIjlw93501_300x300.jpg" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="pic">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="http://d7.yihaodianimg.com/V00/M03/75/FD/CgQDslQ3unuAdCOKAAGQmS56iC058101_300x300.jpg" alt="">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <footer>
+            <a href="login.html">坐标系</a>
+        </footer>
+        <!-- <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script> -->
+        <script type="text/javascript" src="js/vue.js"></script>
+        <script type="text/javascript" src="js/zepto/zepto.js"></script><!-- 轻量级的针对现代高级浏览器的JavaScript库 -->
+        <script type="text/javascript" src="js/swipeSlide.js"></script><!-- banner图片轮播 -->
+        <script type="text/javascript">
+            $(function(){
+                var slideTab = $('.slide_tab .slide').swipeSlide({
+                    continuousScroll:true,
+                    autoSwipe : false,
+                    lazyLoad : true,
+                    firstCallback : function(i){
+                        $('.slide_tab .tab .item').eq(i).addClass('cur');
+                    },
+                    callback : function(i){
+                        $('.slide_tab .tab .item').eq(i).addClass('cur').siblings().removeClass('cur');
+                    }
+                });
+                $('.slide_tab .tab .item').on('click',function(i){
+                    slideTab[0].goTo($(this).index());
+                });
+                $('.slide_tab .btn_left').on('click',function(i){
+                    slideTab[0].goTo('prev');
+                });
+                $('.slide_tab .btn_right').on('click',function(i){
+                    slideTab[0].goTo('next');
+                });
+            });
+
+            
+                var b = function(){
+                    alert("c");
+                }
+                
+                $.ajax({
+                    type: 'GET',
+                    async:false,
+                    url: common.sliceImgBase + 'Api/Pathology/GetSlideById',
+                    timeout: 300,
+                    dataType: "jsonp",
+                    //callBack 
+                    //context: $("body"),
+                    jsonpCallback:"b",
+                    data: { id: '251'},
+                    success: function(data){
+                        alert(data);
+                    },
+                    error: function(xhr, type){
+                       alert('Ajax error!')
+                    }
+                });
+           
+                // Changes XML to JSON
+function xmlToJson(xml) {
+     
+    // Create the return object
+    var obj = {};
+ 
+    if (xml.nodeType == 1) { // element
+        // do attributes
+        if (xml.attributes.length > 0) {
+        obj["@attributes"] = {};
+            for (var j = 0; j < xml.attributes.length; j++) {
+                var attribute = xml.attributes.item(j);
+                obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+            }
+        }
+    } else if (xml.nodeType == 3) { // text
+        obj = xml.nodeValue;
+    }
+ 
+    // do children
+    if (xml.hasChildNodes()) {
+        for(var i = 0; i < xml.childNodes.length; i++) {
+            var item = xml.childNodes.item(i);
+            var nodeName = item.nodeName;
+            if (typeof(obj[nodeName]) == "undefined") {
+                obj[nodeName] = xmlToJson(item);
+            } else {
+                if (typeof(obj[nodeName].length) == "undefined") {
+                    var old = obj[nodeName];
+                    obj[nodeName] = [];
+                    obj[nodeName].push(old);
+                }
+                obj[nodeName].push(xmlToJson(item));
+            }
+        }
+    }
+    return obj;
+};
+            
+            
+        </script>
+    </body>
+</html>

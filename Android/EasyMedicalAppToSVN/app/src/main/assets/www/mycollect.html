@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>我的收藏</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+</head>
+
+<body>
+<!--顶部开始-->
+<div class="top">
+    <div class="back" style="top:1%;left:0;width:10%;height:100%;background-image: url(img/back.png);background-size: 41% 61%;background-repeat: no-repeat;background-position:center;"></div>
+    <div class="message"><a href="###" onclick="saveUrl()"></a></div>
+    <h1>我的收藏</h1>
+</div>
+<!--顶部结束-->
+
+<!--收藏开始-->
+<div id="bgwin"></div>
+<div class="course_box">
+    <input type="hidden" id="courseid"/>
+    <div class="menu">
+        <div class="tab_ul clearfix">
+            <div class="fleft selected" id="kcall">
+                <a class="select_span">全部收藏</a>
+            </div>
+            <div class="fleft" id="lastNew">
+                <a class="select_span">最新</a>
+            </div>
+            <div class="fleft" id="btnsearch">
+                <a>搜索</a>
+            </div>
+        </div>
+        <div class="large_fixed">
+            <ul class="none" id="kcall_list">
+                <li data-id="1" class="selected"><a href="javascript:void(0)">课程收藏</a></li>
+                <li data-id="2"><a href="javascript:void(0)">课件收藏</a></li>
+                <li data-id="3"><a href="javascript:void(0)">试题收藏</a></li>
+                <li data-id="4"><a href="javascript:void(0)">试卷收藏</a></li>
+            </ul>
+            <div class="search_fixed none" id="btnsearchBox">
+                <div id="kcSearch">
+                    <div class="search clearfix">
+                        <form id="formSearch" action="" method="post" class="clearfix">
+                            <input type="text" value="" id="input_search" placeholder="课程关键字"/>
+                            <a href="javascript:void(0)" id="btns_search" class="btns_search"></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tab_content" id="questionslist">
+        <ul id="kc_list">
+            <template v-for="Curriculum in CurriculumList">
+            <li  class="clearfix">
+                <div class="li_img_box"><a href="###" style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a><img v-bind:src="{{Curriculum.ThumbnailUrl}}"/></div>
+                <div class="li_content_box">
+                    <h1>{{ Curriculum.Name }}</h1>
+                    <h3>讲师：{{ Curriculum.Teacher }}</h3>
+                    <h3>课件数量：{{ Curriculum.CourseWaresCount }}  总积分：{{ Curriculum.TotalScore }}</h3>
+                    <h3 class="color1">{{ Curriculum.CourseName }}</h3>
+                    <div class="btnsBoxs star" v-on:click="collect(4,$event)"><span><img id = "{{Curriculum.Id}}"/></span></div>
+
+                </div>
+            </li>
+            </template>
+            <template v-for="CourseWare in CourseWareList">
+            <li class="clearfix">
+                <div class="li_img_box"><a href="###" style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a><img v-bind:src="{{CourseWare.ThumbnailUrl}}"/></div>
+                <div class="li_content_box">
+                    <h1>{{ CourseWare.Name }}</h1>
+                    <h3>讲师：{{ CourseWare.Teacher }}</h3>
+                    <h3>课件数量：{{ CourseWare.totalPage }}  总积分：{{ CourseWare.TotalScore }}</h3>
+                    <h3 class="color1">寄生虫</h3>
+                     <div class="btnsBoxs star" v-on:click="collect(5,$event)"><span><img id = "{{CourseWare.id}}"/></span></div>
+                </div>
+            </li>
+            </template>
+            <template  v-for="Question in QuestionList">
+            <li class="clearfix">
+                <div class="li_img_box"><a href="###" style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a><img v-bind:src="{{Question.ThumbnailUrl}}"/></div>
+                <div class="li_content_box">
+                    <h1>{{ Question.Content }}</h1>
+                    <h3>答对：{{ Question.MyRightCount }} 答错：{{ Question.MyErrorCount }}</h3>
+                    <h3 class="color1">{{ Question.CourseName }}</h3>
+                    <div class="btnsBoxs star" v-on:click="collect(1,$event)"><span><img id = "{{Question.QuestionId}}"/></span></div>
+                </div>
+            </li>
+            </template>
+            <template  v-for="Exercise in ExerciseList">
+            <li class="clearfix">
+                <div class="li_img_box"><a href="###" style="background:url(img/li-img.png) no-repeat center center; background-size:100% 100%;"></a><img v-bind:src="{{Exercise.ThumbnailUrl}}"/></div>
+                <div class="li_content_box">
+                    <h1>{{ Exercise.ExerciseName }}</h1>
+                    <h3>{{ Exercise.CreateDate }}</h3>
+                    <h3>得分：{{ Exercise.Score }}</h3>
+                    <h3 class="color1">{{ Exercise.CourseName }}</h3>
+                    <div class="btnsBoxs star" v-on:click="collect(3,$event)"><span><img id = "{{Exercise.Id}}"/></span></div>
+                </div>
+            </li>
+            </template>
+        </ul>
+    </div>
+</div>
+<!--收藏结束-->
+
+
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+$(function(){
+    
+    var collectlist = new Vue({
+        el: '#questionslist',
+        data: {
+            CurriculumList:[],
+            CourseWareList:[],
+            QuestionList:[],
+            ExerciseList:[]
+        },
+        methods:{
+            collect:function(type,$event){
+                //alert("a");
+                var id = $event.target.getAttribute("id");
+                if(id){
+                    collect(id,type);
+                }
+            }
+        }
+    })
+
+    var url = common.interfaceBase +"GetMyCollection?courseId=&IsNew="+true+"&UnRead=" + true;
+    result = WAjax(url,'get');
+    common.contactUrl(result.CourseWareList,"ThumbnailUrl");
+    common.contactUrl(result.CourseWareList,"ThumbnailUrl");
+    common.contactUrl(result.QuestionList,"ThumbnailUrl");
+    common.contactUrl(result.ExerciseList,"ThumbnailUrl");
+    collectlist.CurriculumList = result.CurriculumList;
+    collectlist.CourseWareList = result.CourseWareList;
+    collectlist.QuestionList = result.QuestionList;
+    collectlist.ExerciseList = result.ExerciseList;
+
+        
+    $(".tab_ul .fleft").click(function(){
+        $(this).addClass("selected").siblings().removeClass("selected");
+        if($(this).attr('id') == 'kcall'){
+            $("#saveall_list,#btnsearchBox").hide();
+            if($("#kcall_list").is(":hidden")){
+                $("#kcall_list,#bgwin").show();
+                $("#bgwin").css({'opacity':'0.5'});
+            }else {
+                $("#kcall_list,#bgwin").hide();
+            }
+            var codetxt = $(this).find('.select_span');
+            $("#kcall_list li").click(function(){
+                $(this).addClass("selected").siblings().removeClass("selected");
+                codetxt.text($(this).text());
+                $("#kcall_list,#bgwin").hide();
+                $("#courseid").val($(this).attr("data-id"));
+               /* if($(this).text() == "课程收藏"){
+                    var collectid = "CurriculumList = 1";
+                    var selectlist = 1;
+                    var courseId = 1;
+                }else if($(this).text() == "课件收藏"){
+                    var collectid = "CourseWareList = 2";
+                    var selectlist = 2;
+                    var courseId = 2;
+                }else if($(this).text() == "试题收藏"){
+                    var collectid = "QuestionList = 3";
+                    var selectlist = 3;
+                    var courseId = 3;
+                }else if($(this).text() == "试卷收藏"){
+                    var collectid = "ExerciseList = 4";
+                    var selectlist = 4;
+                    var courseId = 4;
+                }
+                if($(this).attr('id') == 'lastNew'){
+                    var isNew = false;
+                }else{
+                    var isNew = true;
+                }
+               var selectlist =  $("#courseid").val();*/
+                getcollectlist();
+            });
+        } else if($(this).attr('id') == 'lastNew'){
+            $("#kcall_list,#btnsearchBox,#bgwin").hide();
+        } else if($(this).attr('id') == 'btnsearch'){
+            $("#kcall_list,#notread_list,#bgwin").hide();
+            if($("#btnsearchBox").is(":hidden")){
+                $("#btnsearchBox,#bgwin").show();
+                $("#bgwin").css({'opacity':'0.5'});
+            }else {
+                $("#btnsearchBox,#bgwin").hide();
+            }
+        } else {
+            $("#notread_list,#kcall_list,#btnsearchBox,#bgwin").hide();
+        }
+    });
+
+  function collect(id,type){
+
+        
+        var url = common.interfaceBase + "DeleteCollection/"+ id +"?collectType="+type;
+        var method = "post";
+        var result = WAjax(url,method);
+
+       /* var isnew = $("#inputselect-isnew").val();
+        if($("#inputselect-collect").val() == 1){
+            var collectid = "CurriculumList = 1";
+            var selectlist = 1;
+        }else if($("#inputselect-collect").val() == 2){
+            var collectid = "CourseWareList = 2";
+            var selectlist = 2;
+        }else if($("#inputselect-collect").val() == 3){
+            var collectid = "QuestionList = 3";
+            var selectlist = 3;
+        }else if($("#inputselect-collect").val() == 4){
+            var collectid = "ExerciseList = 4";
+            var selectlist = 4;
+        }else{
+            var collectid = "ExerciseList = 4";
+            var selectlist = 4;
+        }
+        var courseId = $("#inputselect-category").val();*/
+
+        getcollectlist();
+
+    }
+ //获取列表数据
+    function getcollectlist(){
+        var courseId = $("#courseid").val()||"";
+        var keyword = $("#input_search").val()||"";
+
+        var url = common.interfaceBase + "GetMyCollection?courseId=" + courseId + "&UnRead=" + "&IsNew=" + true;
+
+        if(keyword){
+            var url = common.interfaceBase + "GetMyCollection?courseId=" + courseId + "&UnRead=" + "&IsNew=" + true + "&keyword=" + keyword;
+        }
+
+        var result = WAjax(url,'get');
+
+        if (courseId == 1){
+            collectlist.CurriculumList = result.CurriculumList;
+            collectlist.CourseWareList = [];
+            collectlist.QuestionList = [];
+            collectlist.ExerciseList = [];
+        }else if(courseId == 2){
+            collectlist.CurriculumList = [];
+            collectlist.CourseWareList = result.CourseWareList;
+            collectlist.QuestionList = [];
+            collectlist.ExerciseList = [];
+        }else if(courseId == 3){
+            collectlist.CurriculumList = [];
+            collectlist.CourseWareList = [];
+            collectlist.QuestionList = result.QuestionList;
+            collectlist.ExerciseList = [];
+        }else{
+            collectlist.CurriculumList = [];
+            collectlist.CourseWareList = [];
+            collectlist.QuestionList = [];
+            collectlist.ExerciseList = result.ExerciseList;
+        }
+            
+    }
+
+    $("#btns_search").on("tap",function(){
+        getcollectlist();
+    });
+
+       /*返回*/
+    $(".back").on("tap",function(){
+        //window.location.href = "course.html";
+        common.goToHistoryPage();
+    });
+    
+    });
+function back(){
+    if (getParamUrl("lixicollect") != undefined) {
+        window.location.href = "lianxi.html";
+        return;
+    };
+    window.location.href = "myinfo.html";
+}
+
+function saveUrl(){
+    localStorage["saveUrl"] = window.location.href;
+    window.location.href="messages.html";
+
+}
+</script>
+</body>
+</html>

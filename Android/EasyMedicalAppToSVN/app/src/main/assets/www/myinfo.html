@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>我的</title>
+<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="css/common2.css"/>
+<style>body{ background:#eee;}</style>
+</head>
+
+<body>
+<!--头部开始-->
+<div id="mine-top">
+    <img src="img/top_bg.png" class="img"/>
+     <div class="my_info">
+        <img src="{{ info.Icon }}" align="left"/>
+        <p class="m_top">{{ info.UserName }}<span>{{ info.LoginName }}</span></p>
+    </div>
+    <div class="setting" id="set"><img src="img/setting.png"/></div>
+    <div class="jifen_box">
+        <ul>
+            <li>
+                <p>{{ info.LoginScore }}</p>
+                <p>登陆积分</p>
+            </li>
+            <li>
+                <p>{{ info.StudyScore }}</p>
+                <p>学习积分</p>
+            </li>
+            <li id="rank">
+                <p>{{ info.MyRanking }}</p>
+                <p>我的排名</p>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--头部结束-->
+
+<!--列表开始-->
+<div class="exercise_list">
+    <ul>
+        <li id="mycollect"><a href="javascript:void(0)" >我的收藏</a></li>
+        <li id="mylearningrecord"><a href="javascript:void(0)" >学习记录</a></li>
+        <li id="myteacher"><a href="javascript:void(0)" >我的老师</a></li>
+    </ul>
+</div>
+<div class="exercise_list" id="xitong">
+    <ul>
+        <li id="mymessage"><a href="javascript:void(0)" >系统消息</a></li>
+        <li id="myhelp"><a href="javascript:void(0)" >帮助</a></li>
+    </ul>
+</div>
+<!--列表结束-->
+<script type="text/javascript" src="js/zepto/zepto.min.js"></script>
+<script src="js/common/common.js" type="text/javascript" charset="utf-8" ></script>
+<script src="js/vue.js" type="text/javascript" charset="utf-8" ></script>
+<script>
+window.onload = function  () {
+
+    if (common.isiOS) {
+        window.location="IOS:myinfo";
+    };
+    var url = common.interfaceBase + "GetMyInfo";
+    var method = 'get';
+    var result = WAjax(url,method);
+    console.log(result);
+    // return false;
+    var myinfo = new Vue({
+        el: '#mine-top',
+        data: {
+            info:result
+        }
+    })
+
+    $('#rank').on('click',function  () {
+        //var url = "rank.html";
+        //window.location.href = "rank.html"
+        //common.goToSecondPage(3,url);
+    })
+
+     $('#set').on('click',function  () {
+        var url = "set.html";
+        //window.location.href = "rank.html"
+        common.goToSecondPage(3,url);
+    })
+
+    $('#myinfo').show();
+
+    $("#mycollect").on("tap",collectUrl);
+    $("#mylearningrecord").on("tap",learningrecordUrl);
+   // $("#mydownload").on("tap",downloadUrl);
+    $("#myteacher").on("tap",teacherUrl);
+    $("#myhelp").on("tap",helpUrl);
+    $("#mymessage").on("tap",messageUrl);
+}
+
+function collectUrl(){
+    var url = "mycollect.html";
+    //window.location.href="mycollect.html";
+    common.goToSecondPage(3,url);
+}
+function learningrecordUrl(){
+    var url = "mylearningrecord.html";
+    //window.location.href="mylearningrecord.html";
+    common.goToSecondPage(3,url);
+}
+function teacherUrl(){
+    var url = "myteacher.html";
+    //window.location.href="myteacher.html";
+    common.goToSecondPage(3,url);
+}
+function helpUrl(){
+    var url = "help.html";
+    //window.location.href="help.html";
+    common.goToSecondPage(3,url);
+}
+function messageUrl(){
+    var url = "systemmessage.html";
+    //window.location.href="systemmessage.html";
+    common.goToSecondPage(3,url);
+}
+
+</script>
+</body>
+</html>
